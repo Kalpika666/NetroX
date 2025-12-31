@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetroX VPN | Smart Web</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #00f2fe;
+            --dark: #080c14;
+            --glass: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background: #080c14;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- Sidebar Navigation --- */
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 10000;
+            top: 0;
+            left: 0;
+            background-color: #0d1117;
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 60px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+        }
+
+        .sidebar a {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #ccc;
+            display: block;
+            transition: 0.2s;
+        }
+
+        .sidebar a:hover { color: var(--primary); background: rgba(255,255,255,0.05); }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        /* --- UI Elements --- */
+        .menu-icon {
+            font-size: 25px;
+            cursor: pointer;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 999;
+            background: var(--glass);
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        header { padding: 50px 20px 10px 20px; text-align: center; }
+        .main-logo { width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
+
+        .container { max-width: 600px; margin: auto; padding: 20px; text-align: center; }
+
+        /* Section Handling */
+        .page-section { display: none; animation: fadeIn 0.3s ease; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Style Cards */
+        .card { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; padding: 20px; margin: 15px 0; }
+        .pkg-item { background: rgba(255,255,255,0.04); margin: 8px 0; padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-green { background: #25d366; color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+
+        .tab-btn { background: var(--glass); border: 1px solid var(--border); color: white; padding: 8px 16px; border-radius: 50px; cursor: pointer; margin: 5px; }
+        .tab-btn.selected { background: var(--primary); color: #000; font-weight: bold; }
+
+        .dl-link { display: block; background: var(--glass); padding: 15px; border-radius: 12px; margin: 10px 0; color: white; text-decoration: none; border: 1px solid var(--border); text-align: left; }
+        .dl-link:hover { border-color: var(--primary); }
+
+        video { width: 100%; border-radius: 15px; border: 1px solid var(--border); }
+    </style>
+</head>
+<body>
+
+    <div id="mySidebar" class="sidebar">
+        <span class="closebtn" onclick="closeNav()">&times;</span>
+        <a href="#" onclick="showPage('home')"><i class="fas fa-home"></i> Home</a>
+        <a href="#" onclick="showPage('setup')"><i class="fas fa-play-circle"></i> Setup Guide</a>
+        <a href="#" onclick="showPage('downloads')"><i class="fas fa-download"></i> Download Apps</a>
+        <a href="https://chat.whatsapp.com/KcVV0oSjesd3cNU75Rsx5B" target="_blank"><i class="fab fa-whatsapp"></i> Join Group</a>
+    </div>
+
+    <div class="menu-icon" onclick="openNav()"><i class="fas fa-bars"></i></div>
+
+    <header>
+        <img src="logo.png" alt="NetroX" class="main-logo">
+        <h1 style="margin: 10px 0;">NetroX VPN</h1>
+    </header>
+
+    <div class="container">
+
+        <div id="home" class="page-section active">
+            <h3>📡 Choose Network</h3>
+            <div id="tabs">
+                <button class="tab-btn selected" onclick="changeNet('dialog', this)">Dialog</button>
+                <button class="tab-btn" onclick="changeNet('hutch', this)">Hutch</button>
+                <button class="tab-btn" onclick="changeNet('slt', this)">SLT</button>
+                <button class="tab-btn" onclick="changeNet('airtel', this)">Airtel</button>
+                <button class="tab-btn" onclick="changeNet('mobitel', this)">Mobitel</button>
+            </div>
+            
+            <div class="card" id="net-content">
+                </div>
+
+            <h3 style="margin-top: 30px;">📦 NetroX Plans</h3>
+            <div class="card">
+                <div class="pkg-item"><span>100GB Pack</span> <b>Rs. 150</b> <a href="https://wa.me/94767421838" class="btn-green">Order</a></div>
+                <div class="pkg-item" style="border: 1px solid var(--primary);"><span>Unlimited</span> <b>Rs. 450</b> <a href="https://wa.me/94767421838" class="btn-green">Order</a></div>
+                <div class="pkg-item"><span>200GB Pack</span> <b>Rs. 200</b> <a href="https://wa.me/94767421838" class="btn-green">Order</a></div>
+            </div>
+
+            <h3 style="margin-top: 40px; color: var(--primary);">Contact Support</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="card" style="margin: 0; padding: 15px;">
+                    <small style="color: var(--primary); font-weight: bold; font-size: 0.7rem;">FOUNDER</small>
+                    <h4 style="margin: 5px 0;">Kalpika</h4>
+                    <a href="https://wa.me/94767421838" style="color: #25d366; text-decoration: none; font-size: 0.85rem; font-weight: bold;">
+                        <i class="fab fa-whatsapp"></i> 076 742 1838
+                    </a>
+                </div>
+                <div class="card" style="margin: 0; padding: 15px;">
+                    <small style="color: var(--primary); font-weight: bold; font-size: 0.7rem;">MANAGER</small>
+                    <h4 style="margin: 5px 0;">Tharusha</h4>
+                    <a href="https://wa.me/94760459181" style="color: #25d366; text-decoration: none; font-size: 0.85rem; font-weight: bold;">
+                        <i class="fab fa-whatsapp"></i> 076 045 9181
+                    </a>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <a href="https://chat.whatsapp.com/KcVV0oSjesd3cNU75Rsx5B" target="_blank" style="color: #25d366; text-decoration: none; font-weight: bold; font-size: 0.9rem;">
+                    <i class="fab fa-whatsapp"></i> Join Official Group
+                </a>
+            </div>
+        </div>
+
+        <div id="setup" class="page-section">
+            <h3>🎥 Setup Video Guide</h3>
+            <div class="card">
+                <video controls>
+                    <source src="setup.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+
+        <div id="downloads" class="page-section">
+            <h3>📥 App Downloads</h3>
+            <div class="card">
+                <a href="https://play.google.com/store/apps/details?id=com.netmod.syna" class="dl-link"><i class="fab fa-android"></i> Android Setup (.apk)</a>
+                <a href="https://netmod-vpn-client.en.uptodown.com/windows/download" class="dl-link"><i class="fab fa-windows"></i> Windows PC Setup (.exe)</a>
+                <a href="https://apps.apple.com/lk/app/v2box-v2ray-client/id6446814690" class="dl-link"><i class="fab fa-apple"></i> iOS / iPhone App</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function openNav() { document.getElementById("mySidebar").style.width = "250px"; }
+        function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
+
+        function showPage(pageId) {
+            let sections = document.getElementsByClassName("page-section");
+            for (let s of sections) s.classList.remove("active");
+            document.getElementById(pageId).classList.add("active");
+            closeNav();
+            window.scrollTo(0, 0);
+        }
+
+        const netData = {
+            dialog: [{n: "Dialog Zoom", p: "Rs.224/724"}, {n: "Dialog Tiktok", p: "Rs.277/997"}],
+            hutch: [{n: "Hutch Zoom", p: "Rs.224"}, {n: "Hutch Gaming", p: "Support"}],
+            slt: [{n: "Fiber Zoom", p: "Rs.195/490"}, {n: "Fiber Netflix", p: "Support"}],
+            airtel: [{n: "Airtel Zoom", p: "Fast"}, {n: "Airtel Tiktok", p: "Rs.297/997"}],
+            mobitel: [{n: "Mobitel Zoom", p: "Rs.222"}]
+        };
+
+        function changeNet(net, btn) {
+            let html = "";
+            netData[net].forEach(i => {
+                html += `<div class="pkg-item"><span>${i.n}</span> <b>${i.p}</b> <a href="https://wa.me/94767421838" class="btn-green">Buy</a></div>`;
+            });
+            document.getElementById('net-content').innerHTML = html;
+            let btns = document.getElementsByClassName('tab-btn');
+            for(let b of btns) b.classList.remove('selected');
+            btn.classList.add('selected');
+        }
+
+        window.onload = () => {
+            changeNet('dialog', document.querySelector('.tab-btn'));
+        };
+    </script>
+</body>
+</html>
