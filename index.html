@@ -11,13 +11,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4864911714136046" crossorigin="anonymous"></script>
-
+    
     <style>
         :root {
             --primary: #00f2fe;
             --dark: #080c14;
             --glass: rgba(255, 255, 255, 0.08);
             --border: rgba(255, 255, 255, 0.1);
+            --success: #22c55e;
         }
 
         body {
@@ -26,6 +27,42 @@
             font-family: 'Poppins', sans-serif;
             margin: 0;
             overflow-x: hidden;
+        }
+
+        /* Paid Users Button Styling */
+        .paid-users-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .paid-users-btn:hover {
+            background-color: #16a34a;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        @media (max-width: 640px) {
+            .paid-users-btn {
+                top: 15px;
+                right: 15px;
+                padding: 8px 12px;
+                font-size: 12px;
+            }
         }
 
         .footer-text {
@@ -72,6 +109,10 @@
     </style>
 </head>
 <body>
+
+    <a href="https://kalpika666.github.io/NetroX-UserDashboard/" target="_blank" class="paid-users-btn">
+        <i class="fas fa-user-shield"></i> Paid Users
+    </a>
 
     <div id="mySidebar" class="sidebar">
         <span class="closebtn" onclick="closeNav()">&times;</span>
@@ -182,7 +223,7 @@
         function changeNet(net, btn) {
             let html = "";
             netData[net].forEach(i => {
-                html += `<div class="pkg-item"><span>${i.n}</span> <b>${i.p}</b></div>`;
+                html += `<div class=\"pkg-item\"><span>${i.n}</span> <b>${i.p}</b></div>`;
             });
             document.getElementById('net-content').innerHTML = html;
             let btns = document.getElementsByClassName('tab-btn');
