@@ -29,7 +29,6 @@
             overflow-x: hidden;
         }
 
-        /* Paid Users Button Styling */
         .paid-users-btn {
             position: fixed;
             top: 20px;
@@ -107,7 +106,6 @@
         .form-group label { display: block; font-size: 0.8rem; margin-bottom: 5px; opacity: 0.8; }
         .form-group input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: #111; color: white; box-sizing: border-box; }
         
-        /* Footer link style */
         .footer-links a {
             color: #A9A8A9;
             text-decoration: none;
@@ -121,7 +119,7 @@
 <body>
     <script src="https://pl28596556.effectivegatecpm.com/cc/ee/17/ccee17f4c376762fd119dd82a3ad2b6b.js"></script>
 
-    <a href="http://usage.netrox.online/" target="_blank" class="paid-users-btn">
+    <a href="https://www.effectivegatecpm.com/mfr631dhb?key=398321376e8d8b867dc44d9f861dcb36" target="_blank" class="paid-users-btn" onclick="openAd()">
         <i class="fas fa-user-shield"></i> Paid Users
     </a>
 
@@ -184,31 +182,6 @@
                 <a href="https://discord.gg/4SbnVzjyHS" target="_blank" style="color: #7289da; text-decoration: none; font-weight: bold; font-size: 0.95rem;"><i class="fab fa-discord"></i> Official Discord Server</a>
             </div>
 
-            <div id="articles" style="margin-top: 40px; text-align: left;">
-                <h3 style="color: var(--primary); text-align: center;">📚 VPN & Privacy Insights</h3>
-                
-                <div class="card">
-                    <h4 style="color: var(--primary); margin-bottom: 10px;">Why You Should Use NetroX VPN in 2026?</h4>
-                    <p style="font-size: 13px; color: #ccc; line-height: 1.6;">
-                        In today's digital world, privacy is more important than ever. NetroX VPN provides a secure tunnel for your internet traffic, ensuring that your personal data, passwords, and browsing history stay private from hackers and ISPs. By using advanced V2Ray protocols, we offer high-speed connectivity while maintaining top-tier encryption standards for all our users.
-                    </p>
-                </div>
-
-                <div class="card">
-                    <h4 style="color: var(--primary); margin-bottom: 10px;">Understanding V2Ray and VMess Protocols</h4>
-                    <p style="font-size: 13px; color: #ccc; line-height: 1.6;">
-                        V2Ray is a sophisticated platform designed to bypass network restrictions and censorship. Unlike traditional VPNs, V2Ray is significantly harder to detect because it can mimic normal web traffic patterns. NetroX utilizes VMess and VLESS protocols to give our users in Sri Lanka a stable and fast experience, even on restricted networks like Dialog, Hutch, or SLT.
-                    </p>
-                </div>
-
-                <div class="card">
-                    <h4 style="color: var(--primary); margin-bottom: 10px;">The Importance of Online Data Privacy</h4>
-                    <p style="font-size: 13px; color: #ccc; line-height: 1.6;">
-                        To maximize your online safety, always connect to a trusted VPN when using public Wi-Fi. NetroX VPN regularly updates its server nodes to provide the best performance and bypass the latest firewalls. Our mission is to ensure a free and open internet experience for everyone, keeping your data shielded 24/7 without any interruptions.
-                    </p>
-                </div>
-            </div>
-
             <div class="footer-links" style="margin-top: 50px; text-align: center;">
                 <a href="about.html" target="_blank">About Us</a>
                 <a href="privacy.html" target="_blank">Privacy Policy</a>
@@ -226,9 +199,9 @@
         <div id="downloads" class="page-section">
             <h3>📥 App Downloads</h3>
             <div class="card">
-                <a href="https://play.google.com/store/apps/details?id=com.netmod.syna" class="dl-link"><i class="fab fa-android"></i> Android Setup (.apk)</a>
-                <a href="https://netmod-vpn-client.en.uptodown.com/windows/download" class="dl-link"><i class="fab fa-windows"></i> Windows PC Setup (.exe)</a>
-                <a href="https://apps.apple.com/lk/app/v2box-v2ray-client/id6446814690" class="dl-link"><i class="fab fa-apple"></i> iOS App</a>
+                <a href="https://www.effectivegatecpm.com/mfr631dhb?key=398321376e8d8b867dc44d9f861dcb36" target="_blank" class="dl-link" onclick="openAd()"><i class="fab fa-android"></i> Android Setup (.apk)</a>
+                <a href="https://www.effectivegatecpm.com/mfr631dhb?key=398321376e8d8b867dc44d9f861dcb36" target="_blank" class="dl-link" onclick="openAd()"><i class="fab fa-windows"></i> Windows PC Setup (.exe)</a>
+                <a href="https://www.effectivegatecpm.com/mfr631dhb?key=398321376e8d8b867dc44d9f861dcb36" target="_blank" class="dl-link" onclick="openAd()"><i class="fab fa-apple"></i> iOS App</a>
             </div>
             <div class="footer-text">© 2026 NetroX VPN. Your gateway to unlimited streaming!</div>
         </div>
@@ -249,14 +222,29 @@
     </div>
 
     <script>
+        const smartLink = "https://www.effectivegatecpm.com/mfr631dhb?key=398321376e8d8b867dc44d9f861dcb36";
+
+        // Function to open ad
+        function openAd() {
+            window.open(smartLink, '_blank');
+        }
+
+        // Open ad on first click anywhere on the page
+        document.addEventListener('click', function() {
+            openAd();
+        }, { once: true });
+
         function openNav() { document.getElementById("mySidebar").style.width = "250px"; }
         function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
+        
         function showPage(pageId) {
             let sections = document.getElementsByClassName("page-section");
             for (let s of sections) s.classList.remove("active");
             document.getElementById(pageId).classList.add("active");
             closeNav(); window.scrollTo(0, 0);
+            openAd(); // Show ad when switching pages
         }
+
         const netData = {
             dialog: [{n: "Dialog Zoom", p: "Rs.224/724"}, {n: "Dialog Tiktok", p: "Rs.277/997"}],
             hutch: [{n: "Hutch Zoom", p: "Rs.224"}, {n: "Hutch Gaming", p: "Any Package"}],
@@ -264,6 +252,7 @@
             airtel: [{n: "Airtel Zoom", p: "Any Package"}, {n: "Airtel Tiktok", p: "Rs.297/997"}],
             mobitel: [{n: "Mobitel Zoom", p: "Rs.222"}]
         };
+
         function changeNet(net, btn) {
             let html = "";
             netData[net].forEach(i => {
@@ -274,15 +263,19 @@
             for(let b of btns) b.classList.remove('selected');
             btn.classList.add('selected');
         }
+
         function openOrder(planDetails) {
+            openAd(); // Open ad when clicking order button
             document.getElementById('selectedPkg').value = planDetails;
             document.getElementById('orderModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
         }
+
         function closeOrder() {
             document.getElementById('orderModal').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
+
         window.onload = () => { changeNet('dialog', document.querySelector('.tab-btn')); };
     </script>
 </body>
