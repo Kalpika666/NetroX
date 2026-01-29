@@ -119,7 +119,7 @@
 <body>
     <script src="https://pl28596556.effectivegatecpm.com/cc/ee/17/ccee17f4c376762fd119dd82a3ad2b6b.js"></script>
 
-    <a href=target="_blank" class="paid-users-btn" onclick="openAd()">
+    <a href="http://usage.netrox.online/" target="_blank" class="paid-users-btn">
         <i class="fas fa-user-shield"></i> Paid Users
     </a>
 
@@ -176,12 +176,6 @@
                 </div>
             </div>
 
-            <div style="margin-top: 25px; display: flex; flex-direction: column; gap: 12px; align-items: center; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px;">
-                <a href="https://chat.whatsapp.com/KcVV0oSjesd3cNU75Rsx5B" target="_blank" style="color: #25d366; text-decoration: none; font-weight: bold; font-size: 0.95rem;"><i class="fab fa-whatsapp"></i> Official WhatsApp Group</a>
-                <a href="https://t.me/NetroX_VPN" target="_blank" style="color: #0088cc; text-decoration: none; font-weight: bold; font-size: 0.95rem;"><i class="fab fa-telegram"></i> Official Telegram Channel</a>
-                <a href="https://discord.gg/4SbnVzjyHS" target="_blank" style="color: #7289da; text-decoration: none; font-weight: bold; font-size: 0.95rem;"><i class="fab fa-discord"></i> Official Discord Server</a>
-            </div>
-
             <div class="footer-links" style="margin-top: 50px; text-align: center;">
                 <a href="about.html" target="_blank">About Us</a>
                 <a href="privacy.html" target="_blank">Privacy Policy</a>
@@ -224,12 +218,11 @@
     <script>
         const smartLink = "https://www.effectivegatecpm.com/mfr631dhb?key=398321376e8d8b867dc44d9f861dcb36";
 
-        // Function to open ad
         function openAd() {
             window.open(smartLink, '_blank');
         }
 
-        // Open ad on first click anywhere on the page
+        // Open ad on first click anywhere (except on direct usage button if needed, but here once:true covers first visit)
         document.addEventListener('click', function() {
             openAd();
         }, { once: true });
@@ -242,12 +235,12 @@
             for (let s of sections) s.classList.remove("active");
             document.getElementById(pageId).classList.add("active");
             closeNav(); window.scrollTo(0, 0);
-            openAd(); // Show ad when switching pages
+            openAd(); 
         }
 
         const netData = {
             dialog: [{n: "Dialog Zoom", p: "Rs.224/724"}, {n: "Dialog Tiktok", p: "Rs.277/997"}],
-            hutch: [{n: "Hutch Zoom", p: "Rs.224"}, {n: "Hutch Gaming", p: "Any Package"}],
+            hutch: [{n: "Hutch Zoom", p: "Rs.224\"}, {n: "Hutch Gaming", p: "Any Package"}],
             slt: [{n: "Fiber Zoom", p: "Rs.195/490"}, {n: "Fiber Netflix", p: "Any Package"}],
             airtel: [{n: "Airtel Zoom", p: "Any Package"}, {n: "Airtel Tiktok", p: "Rs.297/997"}],
             mobitel: [{n: "Mobitel Zoom", p: "Rs.222"}]
@@ -265,7 +258,7 @@
         }
 
         function openOrder(planDetails) {
-            openAd(); // Open ad when clicking order button
+            openAd();
             document.getElementById('selectedPkg').value = planDetails;
             document.getElementById('orderModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
@@ -280,4 +273,3 @@
     </script>
 </body>
 </html>
-
