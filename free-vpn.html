@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetroX - Free VPN Configs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #00f2fe; --secondary: #4facfe; --dark: #0f172a; --glass: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .back-btn { color: var(--primary); text-decoration: none; font-weight: bold; margin-bottom: 20px; display: inline-block; }
+        header { text-align: center; padding: 20px 0; }
+        h1 { color: var(--primary); margin-bottom: 5px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-top: 20px; }
+        .card { background: var(--glass); border: 1px solid var(--border); padding: 20px; border-radius: 12px; }
+        .card h3 { margin: 0; font-size: 1.1rem; }
+        .status { color: #22c55e; font-size: 0.8rem; margin: 5px 0 15px 0; }
+        .actions { display: flex; gap: 10px; }
+        .btn { flex: 1; padding: 10px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; text-align: center; text-decoration: none; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.2s; }
+        .dl { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #000; }
+        .cp { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--border); }
+        #toast { visibility: hidden; min-width: 200px; background: #22c55e; color: #fff; text-align: center; border-radius: 8px; padding: 10px; position: fixed; left: 50%; bottom: 30px; transform: translateX(-50%); }
+        #toast.show { visibility: visible; }
+    </style>
+</head>
+<body>
+
+<div id="toast">Copied to Clipboard! ✅</div>
+
+<div class="container">
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    <header>
+        <h1>Free VPN Configs</h1>
+        <p>Select your package below</p>
+    </header>
+
+    <div class="grid" id="config-grid">
+        </div>
+</div>
+
+<script>
+    // Fetch data from JSON file
+    fetch('configs.json')
+        .then(response => response.json())
+        .then(data => {
+            const grid = document.getElementById('config-grid');
+            data.forEach(item => {
+                grid.innerHTML += `
+                    <div class="card">
+                        <h3>${item.name}</h3>
+                        <div class="status">● Online - High Speed</div>
+                        <div class="actions">
+                            <a href="${item.link}" class="btn dl"><i class="fas fa-download"></i> File</a>
+                            <button class="btn cp" onclick="copyIt('${item.vless}')"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+
+    function copyIt(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            const t = document.getElementById("toast");
+            t.className = "show";
+            setTimeout(() => { t.className = ""; }, 2500);
+        });
+    }
+</script>
+</body>
+
+</html>
