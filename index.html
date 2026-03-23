@@ -257,10 +257,10 @@
             container.innerHTML += `<div class="package-card"><div class="pkg-header"><div class="pkg-title">${pkg.name}</div><div class="pkg-price">Rs ${pkg.price}.00</div></div><ul class="features"><li><i class="fas fa-check-circle"></i> ${pkg.data} / 30 Days</li></ul><button class="btn-buy" onclick="addToCart(${index})">Buy Now</button></div>`;
         });
 
-        // Updated API Fetching Function for VPS Backend
+        // UPDATED: Now connecting to your VPS API instead of Workers
         async function fetchUsage(email) {
             try {
-                // Connecting to your new VPS API
+                // Connecting to https://api.netrox.online/get-usage?email=...
                 const response = await fetch(`https://api.netrox.online/get-usage?email=${email}`);
                 const data = await response.json();
                 
@@ -284,11 +284,12 @@
 
         async function fetchConfig(email) {
             try {
-                const response = await fetch(`https://netrox-config-fetcher.kalpikachampathi.workers.dev/?email=${email}`);
-                const configText = await response.text();
+                // Connecting to your VPS API for config as well
+                const response = await fetch(`https://api.netrox.online/get-config?email=${email}`);
+                const data = await response.json();
                 
-                if (configText && (configText.includes("vmess://") || configText.includes("vless://"))) {
-                    document.getElementById('config-text').innerText = configText;
+                if (data.config && (data.config.includes("vmess://") || data.config.includes("vless://"))) {
+                    document.getElementById('config-text').innerText = data.config;
                 } else {
                     document.getElementById('config-text').innerText = "No configuration found for this email.";
                 }
