@@ -263,9 +263,9 @@ async function fetchUsage(email) {
         const data = await response.json();
         
         // API එකෙන් එන දත්තවල නම් මෙතනට දෙන්න
-        document.getElementById('up_gb').innerText = data.upload + " GB";
-        document.getElementById('down_gb').innerText = data.download + " GB";
-        document.getElementById('expire_date').innerText = data.expire;
+        document.getElementById('usage_up').innerText = data.upload + " GB";
+        document.getElementById('usage down').innerText = data.download + " GB";
+        document.getElementById('usage_expire').innerText = data.expire;
         
         const statusEl = document.getElementById('usage-status');
         statusEl.innerText = "Active";
