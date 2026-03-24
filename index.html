@@ -257,21 +257,26 @@
 
         // FIXED: Using api.netrox.online for VPS Connection
 async function fetchUsage(email) {
+    const statusEl = document.getElementById('usage-status');
+    const downEl = document.getElementById('usage-down');
+    const upEl = document.getElementById('usage-up');
+    const expireEl = document.getElementById('usage-expire');
+
     try {
-        // ඔයාගේ අලුත් API ලින්ක් එක
-        const response = await fetch(`https://api.netrox.online/get-usage?email=${email}`);
+        // VPS එකේ run වෙන backend එකට කතා කරනවා
+        const response = await fetch(`http://165.22.59.222:3000/get-usage?email=${email}`);
         const data = await response.json();
-        
-        // API එකෙන් එන දත්තවල නම් මෙතනට දෙන්න
-        document.getElementById('usage_up').innerText = data.upload + " GB";
-        document.getElementById('usage down').innerText = data.download + " GB";
-        document.getElementById('usage_expire').innerText = data.expire;
-        
-        const statusEl = document.getElementById('usage-status');
-        statusEl.innerText = "Active";
-        statusEl.className = "status-badge status-online";
+
+        if (data) {
+            downEl.innerText = data.down + " GB";
+            upEl.innerText = data.up + " GB";
+            expireEl.innerText = data.expiry;
+            statusEl.innerText = data.status;
+            statusEl.className = "status-badge " + (data.status === "Active" ? "status-online" : "status-offline");
+        }
     } catch (err) {
-        console.error("Usage fetch failed");
+        console.log("Usage Fetch Error:", err);
+        statusEl.innerText = "Error";
     }
 }
 
