@@ -255,7 +255,7 @@
             container.innerHTML += `<div class="package-card"><div class="pkg-header"><div class="pkg-title">${pkg.name}</div><div class="pkg-price">Rs ${pkg.price}.00</div></div><ul class="features"><li><i class="fas fa-check-circle"></i> ${pkg.data} / 30 Days</li></ul><button class="btn-buy" onclick="addToCart(${index})">Buy Now</button></div>`;
         });
 
-        // FIXED: Using api.netrox.online for VPS Connection
+// FIXED: Usage fetching logic to match HTML IDs and Backend response
 async function fetchUsage(email) {
     const statusEl = document.getElementById('usage-status');
     const downEl = document.getElementById('usage-down');
@@ -263,20 +263,23 @@ async function fetchUsage(email) {
     const expireEl = document.getElementById('usage-expire');
 
     try {
-        // VPS එකේ run වෙන backend එකට කතා කරනවා
+        // VPS එකේ backend එකට කතා කරනවා
         const response = await fetch(`http://165.22.59.222:3000/get-usage?email=${email}`);
         const data = await response.json();
-
+        
         if (data) {
-            downEl.innerText = data.down + " GB";
-            upEl.innerText = data.up + " GB";
-            expireEl.innerText = data.expiry;
-            statusEl.innerText = data.status;
+            // HTML එකේ තියෙන IDs වලට අගයන් ඇතුළත් කිරීම
+            downEl.innerText = (data.down || "0.00") + " GB";
+            upEl.innerText = (data.up || "0.00") + " GB";
+            expireEl.innerText = data.expiry || "-- / --";
+            
+            statusEl.innerText = data.status || "Active";
             statusEl.className = "status-badge " + (data.status === "Active" ? "status-online" : "status-offline");
         }
     } catch (err) {
-        console.log("Usage Fetch Error:", err);
+        console.error("Usage Fetch Error:", err);
         statusEl.innerText = "Error";
+        statusEl.className = "status-badge status-offline";
     }
 }
 
