@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetroX VPN – Client Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+        }
+
+        /* ====== NAVBAR ====== */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 15px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10,10,10,0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            z-index: 1000;
+        }
+
+        .nav-logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: #00d2ff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(0,210,255,0.4);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn {
+            padding: 10px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover { border-color: #00d2ff; color: #00d2ff; }
+
+        /* ====== LOGIN WRAPPER ====== */
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 20px 60px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 500px;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ====== HEADER ====== */
+        .login-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .login-icon {
+            width: 90px; height: 90px;
+            border-radius: 25px;
+            background: rgba(0,210,255,0.1);
+            border: 2px solid rgba(0,210,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .login-icon i { font-size: 40px; color: #00d2ff; }
+
+        .login-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+
+        .login-header h1 span {
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-header p { color: #666; font-size: 0.95rem; }
+
+        /* ====== TAB SWITCHER ====== */
+        .tab-switcher {
+            display: flex;
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            padding: 5px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .tab-btn {
+            flex: 1; padding: 13px;
+            text-align: center;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.3s;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            color: #000;
+            box-shadow: 0 5px 20px rgba(0,210,255,0.3);
+        }
+
+        .tab-btn.paid-tab.active {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            box-shadow: 0 5px 20px rgba(255,215,0,0.3);
+        }
+
+        .tab-btn:not(.active):hover { color: #00d2ff; }
+
+        /* ====== LOGIN CARD ====== */
+        .login-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 25px;
+            padding: 40px 35px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 4px;
+            background: linear-gradient(to right, #00d2ff, #3a7bd5);
+        }
+
+        .login-card.paid-mode::before {
+            background: linear-gradient(to right, #ffd700, #ff8c00);
+        }
+
+        /* ====== FORM ====== */
+        .form-group { margin-bottom: 22px; position: relative; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-wrapper { position: relative; }
+
+        .input-wrapper .input-icon {
+            position: absolute;
+            left: 18px; top: 50%;
+            transform: translateY(-50%);
+            color: #555;
+            font-size: 16px;
+            transition: 0.3s;
+            z-index: 1;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 18px 15px 50px;
+            background: rgba(255,255,255,0.03);
+            border: 2px solid rgba(255,255,255,0.08);
+            border-radius: 15px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 500;
+            transition: 0.4s;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group input::placeholder { color: #444; }
+
+        .form-group input:focus {
+            border-color: #00d2ff;
+            background: rgba(0,210,255,0.03);
+            box-shadow: 0 0 20px rgba(0,210,255,0.1);
+        }
+
+        .form-group input:focus ~ .input-icon { color: #00d2ff; }
+
+        .toggle-password {
+            position: absolute;
+            right: 18px; top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #555;
+            font-size: 16px;
+            transition: 0.3s;
+            z-index: 1;
+        }
+
+        .toggle-password:hover { color: #00d2ff; }
+
+        /* ====== FORM OPTIONS ====== */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .remember-me input[type="checkbox"] {
+            appearance: none;
+            width: 20px; height: 20px;
+            border: 2px solid rgba(255,255,255,0.15);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .remember-me input[type="checkbox"]:checked {
+            background: #00d2ff;
+            border-color: #00d2ff;
+        }
+
+        .remember-me input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #000;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .forgot-link {
+            color: #00d2ff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .forgot-link:hover { opacity: 0.7; }
+
+        /* ====== BUTTONS ====== */
+        .login-btn {
+            width: 100%;
+            padding: 17px;
+            border: none;
+            border-radius: 15px;
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .login-btn.email-btn {
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            color: #000;
+            box-shadow: 0 5px 25px rgba(0,210,255,0.3);
+        }
+
+        .login-btn.email-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 35px rgba(0,210,255,0.5);
+        }
+
+        .login-btn.paid-btn {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: #000;
+            box-shadow: 0 5px 25px rgba(255,215,0,0.3);
+        }
+
+        .login-btn.paid-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 35px rgba(255,215,0,0.5);
+        }
+
+        .login-btn.google-btn {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        .login-btn.google-btn:hover {
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.08);
+            transform: translateY(-3px);
+        }
+
+        .login-btn.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        /* Spinner */
+        .spinner {
+            display: none;
+            width: 20px; height: 20px;
+            border: 3px solid rgba(0,0,0,0.2);
+            border-top-color: #000;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .login-btn.loading .btn-text { display: none; }
+        .login-btn.loading .spinner { display: block; }
+
+        /* Google Icon */
+        .google-icon {
+            width: 22px; height: 22px;
+        }
+
+        /* ====== DIVIDER ====== */
+        .divider {
+            text-align: center;
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 0;
+            width: 100%; height: 1px;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .divider span {
+            background: #0d0d0d;
+            padding: 0 15px;
+            position: relative;
+            color: #555;
+            font-size: 0.85rem;
+        }
+
+        /* ====== STATUS MESSAGES ====== */
+        .status-msg {
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 0.88rem;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            animation: fadeInUp 0.4s ease;
+            line-height: 1.5;
+        }
+
+        .status-msg.error {
+            display: flex;
+            background: rgba(255,59,48,0.1);
+            border: 1px solid rgba(255,59,48,0.25);
+            color: #ff6b6b;
+        }
+
+        .status-msg.success {
+            display: flex;
+            background: rgba(52,199,89,0.1);
+            border: 1px solid rgba(52,199,89,0.25);
+            color: #34c759;
+        }
+
+        .status-msg.info {
+            display: flex;
+            background: rgba(0,210,255,0.1);
+            border: 1px solid rgba(0,210,255,0.25);
+            color: #00d2ff;
+        }
+
+        /* ====== REGISTER LINK ====== */
+        .register-link {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 20px;
+        }
+
+        .register-link a {
+            color: #00d2ff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .register-link a:hover { opacity: 0.7; }
+
+        /* ====== TAB CONTENT ====== */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* ====== FORGOT PASSWORD MODAL ====== */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-box {
+            background: #111;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            padding: 40px 35px;
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        .modal-box h3 { font-size: 1.5rem; margin-bottom: 8px; }
+        .modal-box p { color: #666; font-size: 0.9rem; margin-bottom: 25px; }
+
+        .modal-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            width: 35px; height: 35px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .modal-close:hover { background: rgba(255,59,48,0.2); color: #ff6b6b; }
+
+        .modal-status {
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-status.error { display: flex; background: rgba(255,59,48,0.1); border: 1px solid rgba(255,59,48,0.2); color: #ff6b6b; }
+        .modal-status.success { display: flex; background: rgba(52,199,89,0.1); border: 1px solid rgba(52,199,89,0.2); color: #34c759; }
+
+        /* ====== LOGIN FOOTER ====== */
+        .login-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .login-footer p { color: #333; font-size: 0.75rem; margin-bottom: 12px; }
+
+        .secure-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0,210,255,0.05);
+            border: 1px solid rgba(0,210,255,0.1);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: #00d2ff;
+        }
+
+        /* ====== USER DASHBOARD (After Login) ====== */
+        .dashboard {
+            display: none;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .dashboard.active { display: block; }
+
+        .dashboard-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 25px;
+            padding: 40px 35px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 4px;
+            background: linear-gradient(to right, #00d2ff, #3a7bd5);
+        }
+
+        .user-avatar {
+            width: 90px; height: 90px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2.5rem;
+            overflow: hidden;
+        }
+
+        .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .dashboard-card h2 { font-size: 1.6rem; margin-bottom: 5px; }
+        .dashboard-card .user-email { color: #666; font-size: 0.9rem; margin-bottom: 25px; }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .dash-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .dash-item .dash-icon { font-size: 24px; color: #00d2ff; margin-bottom: 8px; }
+        .dash-item .dash-label { font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+        .dash-item .dash-value { font-size: 1.1rem; font-weight: 700; margin-top: 4px; }
+
+        .dash-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .dash-btn {
+            padding: 13px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .dash-btn.primary {
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            color: #000;
+        }
+
+        .dash-btn.danger {
+            background: rgba(255,59,48,0.1);
+            border: 1px solid rgba(255,59,48,0.2);
+            color: #ff6b6b;
+        }
+
+        .dash-btn:hover { transform: scale(1.05); }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 768px) {
+            .login-card { padding: 30px 20px; }
+            .login-header h1 { font-size: 1.6rem; }
+            .form-options { flex-direction: column; gap: 12px; align-items: flex-start; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .dash-actions { flex-direction: column; }
+            .dash-btn { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal-overlay" id="forgotModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeForgot()"><i class="fas fa-times"></i></button>
+            <h3>🔑 Reset Password</h3>
+            <p>Enter your email address and we'll send you a password reset link.</p>
+
+            <div class="modal-status" id="modalStatus"></div>
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" id="resetEmail" placeholder="Enter your email">
+                </div>
+            </div>
+
+            <button class="login-btn email-btn" onclick="sendReset()" id="resetBtn">
+                <span class="btn-text"><i class="fas fa-paper-plane"></i> Send Reset Link</span>
+                <div class="spinner"></div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav>
+        <a href="index.html" class="nav-logo">
+            <i class="fas fa-shield-alt"></i> NetroX VPN
+        </a>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+    </nav>
+
+    <!-- Login Wrapper -->
+    <div class="login-wrapper">
+        <div class="login-container">
+
+            <!-- Login Forms (hidden when logged in) -->
+            <div id="loginForms">
+
+                <!-- Header -->
+                <div class="login-header">
+                    <div class="login-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h1>Welcome to <span>NetroX VPN</span></h1>
+                    <p>Sign in to access your VPN dashboard</p>
+                </div>
+
+                <!-- Tab Switcher -->
+                <div class="tab-switcher">
+                    <div class="tab-btn active" id="clientTabBtn" onclick="switchTab('client', this)">
+                        <i class="fas fa-user"></i> Client Login
+                    </div>
+                    <div class="tab-btn paid-tab" id="paidTabBtn" onclick="switchTab('paid', this)">
+                        <i class="fas fa-crown"></i> Paid User
+                    </div>
+                </div>
+
+                <!-- ===== CLIENT LOGIN TAB ===== -->
+                <div class="tab-content active" id="client-tab">
+                    <div class="login-card">
+
+                        <div class="status-msg" id="clientStatus"></div>
+
+                        <!-- Google Sign In -->
+                        <button class="login-btn google-btn" onclick="signInWithGoogle()">
+                            <svg class="google-icon" viewBox="0 0 48 48">
+                                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                                <path fill="none" d="M0 0h48v48H0z"/>
+                            </svg>
+                            <span class="btn-text">Continue with Google</span>
+                            <div class="spinner" style="border-top-color:#fff;"></div>
+                        </button>
+
+                        <div class="divider"><span>or sign in with email</span></div>
+
+                        <!-- Email Login Form -->
+                        <form onsubmit="signInWithEmail(event)">
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-envelope input-icon"></i>
+                                    <input type="email" id="clientEmail" placeholder="Enter your email address" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Password</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-lock input-icon"></i>
+                                    <input type="password" id="clientPass" placeholder="Enter your password" required>
+                                    <span class="toggle-password" onclick="togglePass('clientPass', this)">
+                                        <i class="fas fa-eye"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-options">
+                                <label class="remember-me">
+                                    <input type="checkbox" id="rememberMe"> Remember me
+                                </label>
+                                <a href="#" class="forgot-link" onclick="openForgot()">Forgot Password?</a>
+                            </div>
+
+                            <button type="submit" class="login-btn email-btn" id="emailLoginBtn">
+                                <span class="btn-text"><i class="fas fa-sign-in-alt"></i> Sign In</span>
+                                <div class="spinner"></div>
+                            </button>
+                        </form>
+
+                        <div class="register-link">
+                            Don't have an account?
+                            <a href="https://wa.me/94760216144?text=Hello!%20I%20want%20to%20create%20a%20NetroX%20VPN%20account">Contact Us</a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ===== PAID USER TAB ===== -->
+                <div class="tab-content" id="paid-tab">
+                    <div class="login-card paid-mode">
+
+                        <div class="status-msg" id="paidStatus"></div>
+
+                        <!-- Google Sign In for Paid -->
+                        <button class="login-btn google-btn" onclick="signInWithGooglePaid()">
+                            <svg class="google-icon" viewBox="0 0 48 48">
+                                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                                <path fill="none" d="M0 0h48v48H0z"/>
+                            </svg>
+                            <span class="btn-text">Continue with Google</span>
+                            <div class="spinner" style="border-top-color:#fff;"></div>
+                        </button>
+
+                        <div class="divider"><span>or sign in with email</span></div>
+
+                        <!-- Paid User Email Form -->
+                        <form onsubmit="signInWithEmailPaid(event)">
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-envelope input-icon"></i>
+                                    <input type="email" id="paidEmail" placeholder="Enter your email address" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Password</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-lock input-icon"></i>
+                                    <input type="password" id="paidPass" placeholder="Enter your password" required>
+                                    <span class="toggle-password" onclick="togglePass('paidPass', this)">
+                                        <i class="fas fa-eye"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-options">
+                                <label class="remember-me">
+                                    <input type="checkbox"> Remember me
+                                </label>
+                                <a href="#" class="forgot-link" onclick="openForgot()">Need Help?</a>
+                            </div>
+
+                            <button type="submit" class="login-btn paid-btn" id="paidLoginBtn">
+                                <span class="btn-text"><i class="fas fa-crown"></i> Access Dashboard</span>
+                                <div class="spinner" style="border-top-color:#000;"></div>
+                            </button>
+                        </form>
+
+                        <div class="register-link">
+                            Need a VPN account?
+                            <a href="https://wa.me/94760216144?text=Hello!%20I%20want%20to%20buy%20a%20NetroX%20VPN%20plan">Buy Now</a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- End loginForms -->
+
+            <!-- ===== DASHBOARD (Shown after login) ===== -->
+            <div class="dashboard" id="dashboard">
+                <div class="dashboard-card">
+                    <div class="user-avatar" id="userAvatar">
+                        <i class="fas fa-user" style="color:#000; font-size:2rem;"></i>
+                    </div>
+                    <h2 id="userName">Welcome!</h2>
+                    <p class="user-email" id="userEmail">loading...</p>
+
+                    <div class="dashboard-grid">
+                        <div class="dash-item">
+                            <div class="dash-icon"><i class="fas fa-shield-alt"></i></div>
+                            <div class="dash-label">Status</div>
+                            <div class="dash-value" style="color:#34c759;">● Active</div>
+                        </div>
+                        <div class="dash-item">
+                            <div class="dash-icon"><i class="fas fa-crown"></i></div>
+                            <div class="dash-label">Account</div>
+                            <div class="dash-value" id="userPlan">Client</div>
+                        </div>
+                        <div class="dash-item">
+                            <div class="dash-icon"><i class="fas fa-server"></i></div>
+                            <div class="dash-label">Servers</div>
+                            <div class="dash-value">15+ Online</div>
+                        </div>
+                        <div class="dash-item">
+                            <div class="dash-icon"><i class="fas fa-clock"></i></div>
+                            <div class="dash-label">Support</div>
+                            <div class="dash-value">24/7</div>
+                        </div>
+                    </div>
+
+                    <div class="dash-actions">
+                        <a href="https://wa.me/94760216144" class="dash-btn primary">
+                            <i class="fab fa-whatsapp"></i> Contact Support
+                        </a>
+                        <a href="index.html#pricing" class="dash-btn primary">
+                            <i class="fas fa-bolt"></i> Upgrade Plan
+                        </a>
+                        <button class="dash-btn danger" onclick="signOut()">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="login-footer">
+                <p>&copy; 2025 NetroX VPN. All rights reserved. | Developed by KMAX ⚡</p>
+                <div class="secure-badge">
+                    <i class="fas fa-lock"></i> 256-bit SSL Encrypted & Firebase Secured
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+    <!-- Particles -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <script>
+        // ====== FIREBASE CONFIG ======
+        const firebaseConfig = {
+            apiKey: "AIzaSyCvUlVKoDIPG_w23ZzyHLpcyRO1yEfqmmU",
+            authDomain: "netrox-database.firebaseapp.com",
+            projectId: "netrox-database",
+            storageBucket: "netrox-database.firebasestorage.app",
+            messagingSenderId: "847178411597",
+            appId: "1:847178411597:web:827582517f94cec141f604"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const provider = new firebase.auth.GoogleAuthProvider();
+
+        // ====== AUTH STATE LISTENER ======
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                showDashboard(user);
+            } else {
+                hideDashboard();
+            }
+        });
+
+        // ====== SHOW DASHBOARD ======
+        function showDashboard(user) {
+            document.getElementById('loginForms').style.display = 'none';
+            document.getElementById('dashboard').classList.add('active');
+
+            // Set user info
+            document.getElementById('userName').textContent = user.displayName || 'NetroX User';
+            document.getElementById('userEmail').textContent = user.email;
+
+            // Set avatar
+            if (user.photoURL) {
+                document.getElementById('userAvatar').innerHTML = `<img src="${user.photoURL}" alt="avatar">`;
+            } else {
+                const initials = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+                document.getElementById('userAvatar').innerHTML = `<span style="color:#000;font-size:2rem;font-weight:800;">${initials}</span>`;
+            }
+
+            // Check if paid user tab was active
+            const isPaid = sessionStorage.getItem('netrox_paid_login');
+            document.getElementById('userPlan').textContent = isPaid === 'true' ? '👑 Paid User' : 'Client';
+        }
+
+        // ====== HIDE DASHBOARD ======
+        function hideDashboard() {
+            document.getElementById('loginForms').style.display = 'block';
+            document.getElementById('dashboard').classList.remove('active');
+        }
+
+        // ====== SIGN OUT ======
+        function signOut() {
+            auth.signOut().then(() => {
+                sessionStorage.removeItem('netrox_paid_login');
+                showStatus('clientStatus', 'info', 'Signed out successfully!');
+            });
+        }
+
+        // ====== GOOGLE SIGN IN (Client) ======
+        function signInWithGoogle() {
+            const btn = document.querySelector('#client-tab .google-btn');
+            btn.classList.add('loading');
+            clearStatus('clientStatus');
+
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    btn.classList.remove('loading');
+                    sessionStorage.setItem('netrox_paid_login', 'false');
+                    showStatus('clientStatus', 'success', '✅ Login successful! Welcome back!');
+                })
+                .catch((error) => {
+                    btn.classList.remove('loading');
+                    showStatus('clientStatus', 'error', getFirebaseError(error.code));
+                });
+        }
+
+        // ====== GOOGLE SIGN IN (Paid User) ======
+        function signInWithGooglePaid() {
+            const btn = document.querySelector('#paid-tab .google-btn');
+            btn.classList.add('loading');
+            clearStatus('paidStatus');
+
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    btn.classList.remove('loading');
+                    sessionStorage.setItem('netrox_paid_login', 'true');
+                    showStatus('paidStatus', 'success', '✅ Login successful! Welcome Paid User!');
+                })
+                .catch((error) => {
+                    btn.classList.remove('loading');
+                    showStatus('paidStatus', 'error', getFirebaseError(error.code));
+                });
+        }
+
+        // ====== EMAIL SIGN IN (Client) ======
+        function signInWithEmail(e) {
+            e.preventDefault();
+            const email = document.getElementById('clientEmail').value;
+            const pass = document.getElementById('clientPass').value;
+            const remember = document.getElementById('rememberMe').checked;
+            const btn = document.getElementById('emailLoginBtn');
+
+            btn.classList.add('loading');
+            clearStatus('clientStatus');
+
+            // Set persistence
+            const persistence = remember
+                ? firebase.auth.Auth.Persistence.LOCAL
+                : firebase.auth.Auth.Persistence.SESSION;
+
+            auth.setPersistence(persistence)
+                .then(() => auth.signInWithEmailAndPassword(email, pass))
+                .then(() => {
+                    btn.classList.remove('loading');
+                    sessionStorage.setItem('netrox_paid_login', 'false');
+                    showStatus('clientStatus', 'success', '✅ Login successful! Welcome back!');
+                })
+                .catch((error) => {
+                    btn.classList.remove('loading');
+                    showStatus('clientStatus', 'error', getFirebaseError(error.code));
+                });
+        }
+
+        // ====== EMAIL SIGN IN (Paid) ======
+        function signInWithEmailPaid(e) {
+            e.preventDefault();
+            const email = document.getElementById('paidEmail').value;
+            const pass = document.getElementById('paidPass').value;
+            const btn = document.getElementById('paidLoginBtn');
+
+            btn.classList.add('loading');
+            clearStatus('paidStatus');
+
+            auth.signInWithEmailAndPassword(email, pass)
+                .then(() => {
+                    btn.classList.remove('loading');
+                    sessionStorage.setItem('netrox_paid_login', 'true');
+                    showStatus('paidStatus', 'success', '✅ Access granted! Welcome Paid User!');
+                })
+                .catch((error) => {
+                    btn.classList.remove('loading');
+                    showStatus('paidStatus', 'error', getFirebaseError(error.code));
+                });
+        }
+
+        // ====== FORGOT PASSWORD ======
+        function openForgot() {
+            document.getElementById('forgotModal').classList.add('active');
+        }
+
+        function closeForgot() {
+            document.getElementById('forgotModal').classList.remove('active');
+            document.getElementById('resetEmail').value = '';
+            document.getElementById('modalStatus').className = 'modal-status';
+        }
+
+        function sendReset() {
+            const email = document.getElementById('resetEmail').value;
+            const btn = document.getElementById('resetBtn');
+            const status = document.getElementById('modalStatus');
+
+            if (!email) {
+                status.className = 'modal-status error';
+                status.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please enter your email.';
+                return;
+            }
+
+            btn.classList.add('loading');
+            status.className = 'modal-status';
+
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    btn.classList.remove('loading');
+                    status.className = 'modal-status success';
+                    status.innerHTML = '<i class="fas fa-check-circle"></i> Reset link sent! Check your email.';
+                    setTimeout(closeForgot, 3000);
+                })
+                .catch((error) => {
+                    btn.classList.remove('loading');
+                    status.className = 'modal-status error';
+                    status.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${getFirebaseError(error.code)}`;
+                });
+        }
+
+        // ====== HELPER: FIREBASE ERROR MESSAGES ======
+        function getFirebaseError(code) {
+            const errors = {
+                'auth/user-not-found': '❌ No account found with this email. Contact support.',
+                'auth/wrong-password': '❌ Incorrect password. Please try again.',
+                'auth/invalid-email': '❌ Invalid email address format.',
+                'auth/user-disabled': '❌ This account has been disabled. Contact support.',
+                'auth/too-many-requests': '⚠️ Too many failed attempts. Please try again later.',
+                'auth/network-request-failed': '❌ Network error. Check your connection.',
+                'auth/popup-closed-by-user': '⚠️ Login popup was closed. Please try again.',
+                'auth/popup-blocked': '⚠️ Popup blocked by browser. Allow popups and try again.',
+                'auth/invalid-credential': '❌ Invalid credentials. Check your email and password.',
+                'auth/email-already-in-use': '❌ This email is already registered.',
+            };
+            return errors[code] || '❌ An error occurred. Please try again or contact support.';
+        }
+
+        // ====== HELPER: SHOW STATUS ======
+        function showStatus(id, type, msg) {
+            const el = document.getElementById(id);
+            el.className = `status-msg ${type}`;
+            el.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : type === 'info' ? 'info' : 'exclamation'}-circle"></i> ${msg}`;
+        }
+
+        function clearStatus(id) {
+            const el = document.getElementById(id);
+            el.className = 'status-msg';
+            el.innerHTML = '';
+        }
+
+        // ====== TAB SWITCHING ======
+        function switchTab(tab, el) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById(tab + '-tab').classList.add('active');
+            clearStatus('clientStatus');
+            clearStatus('paidStatus');
+        }
+
+        // ====== PASSWORD TOGGLE ======
+        function togglePass(id, el) {
+            const input = document.getElementById(id);
+            const icon = el.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // ====== PARTICLES ======
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#00d2ff' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.3, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1 } },
+                size: { value: 3, random: true, anim: { enable: true, speed: 2, size_min: 0.3 } },
+                line_linked: { enable: true, distance: 150, color: '#00d2ff', opacity: 0.15, width: 1 },
+                move: { enable: true, speed: 1.5, direction: 'none', random: true, out_mode: 'out' }
+            },
+            interactivity: {
+                events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' }, resize: true },
+                modes: { grab: { distance: 140, line_linked: { opacity: 0.5 } }, push: { particles_nb: 4 } }
+            },
+            retina_detect: true
+        });
+    </script>
+
+</body>
+</html>
