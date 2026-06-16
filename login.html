@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetroX VPN – Login & Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://i.ibb.co/Kj3NdKvH/Whats-App-Image-2026-04-21-at-7-52-57-PM-1.jpg" type="image/jpeg">
+
+    <style>
+        :root {
+            --cyan:#00d2ff; --blue:#3a7bd5; --gold:#ffd700; --orange:#ff8c00;
+            --green:#34c759; --red:#ff3b30; --bg:#050510;
+            --card:rgba(255,255,255,0.02); --border:rgba(255,255,255,0.04);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Inter',sans-serif; background:var(--bg); color:#fff; min-height:100vh; overflow-x:hidden; }
+
+        .mesh-bg {
+            position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(0,210,255,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(58,123,213,0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(255,215,0,0.03) 0%, transparent 50%);
+        }
+
+        #particles-js { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; }
+
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(50px)}to{opacity:1;transform:translateY(0)} }
+        @keyframes scaleIn { from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)} }
+        @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
+        @keyframes rotate { to{transform:rotate(360deg)} }
+
+        nav {
+            position:fixed; top:0; width:100%; padding:12px 5%; display:flex;
+            justify-content:space-between; align-items:center;
+            background:rgba(5,5,16,0.9); backdrop-filter:blur(25px);
+            border-bottom:1px solid var(--border); z-index:1000;
+        }
+
+        .nav-logo { font-size:20px; font-weight:800; color:var(--cyan); text-transform:uppercase; letter-spacing:3px; text-decoration:none; display:flex; align-items:center; gap:12px; }
+        .nav-logo img { width:42px; height:42px; object-fit:cover; border-radius:12px; border:1px solid rgba(255,255,255,0.1); }
+
+        .page-wrapper { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:100px 15px 50px; }
+        .main-container { width:100%; max-width:520px; }
+
+        .login-card { background:var(--card); border:1px solid var(--border); border-radius:22px; padding:35px 28px; backdrop-filter:blur(10px); position:relative; overflow:hidden; animation:fadeInUp 0.8s ease; }
+        .login-card::before { content:''; position:absolute; top:0; left:0; width:100%; height:3px; background:linear-gradient(to right, var(--cyan), var(--blue)); }
+        .login-card.paid-mode::before { background:linear-gradient(to right, var(--gold), var(--orange)); }
+
+        .tab-switcher { display:flex; background:rgba(255,255,255,0.02); border-radius:14px; padding:4px; margin-bottom:25px; border:1px solid var(--border); }
+        .tab-btn { flex:1; padding:12px; text-align:center; border-radius:11px; cursor:pointer; font-weight:600; font-size:13px; color:#555; transition:0.3s; }
+        .tab-btn.active { background:linear-gradient(135deg, var(--cyan), var(--blue)); color:#000; }
+        .tab-btn.paid-tab.active { background:linear-gradient(135deg, var(--gold), var(--orange)); color:#000; }
+
+        .form-group { margin-bottom:20px; }
+        .form-group label { display:block; margin-bottom:8px; font-size:0.75rem; color:#666; text-transform:uppercase; letter-spacing:1px; }
+        .input-wrapper { position:relative; }
+        .input-wrapper i { position:absolute; left:16px; top:50%; transform:translateY(-50%); color:#444; }
+        .input-wrapper input { width:100%; padding:14px 16px 14px 46px; background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:12px; color:#fff; outline:none; }
+
+        .login-btn { width:100%; padding:15px; border:none; border-radius:14px; font-weight:700; cursor:pointer; transition:0.4s; display:flex; align-items:center; justify-content:center; gap:10px; text-transform:uppercase; }
+        .btn-client { background:linear-gradient(135deg, var(--cyan), var(--blue)); color:#000; }
+        .btn-paid { background:linear-gradient(135deg, var(--gold), var(--orange)); color:#000; }
+
+        .status-msg { padding:12px; border-radius:10px; margin-bottom:15px; font-size:0.8rem; text-align:center; display:none; }
+        .status-msg.error { display:block; background:rgba(255,59,48,0.1); color:#ff6b6b; border:1px solid rgba(255,59,48,0.2); }
+
+        .dashboard { display:none; }
+        .dashboard.active { display:block; }
+
+        .welcome-banner { background:linear-gradient(135deg, rgba(0,210,255,0.06), rgba(58,123,213,0.04)); border:1px solid rgba(0,210,255,0.08); border-radius:22px; padding:25px; margin-bottom:20px; display:flex; align-items:center; gap:18px; position:relative; }
+        .w-avatar { width:65px; height:65px; border-radius:18px; background:linear-gradient(135deg, var(--cyan), var(--blue)); display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:800; color:#000; text-transform:uppercase; position:relative; }
+        .online-dot { position:absolute; bottom:2px; right:2px; width:12px; height:12px; border-radius:50%; background:var(--green); border:2px solid var(--bg); animation:blink 2s infinite; }
+
+        .quick-stats { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:10px; margin-bottom:18px; }
+        .q-stat { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:16px 8px; text-align:center; animation:scaleIn 0.5s ease backwards; }
+        .q-label { font-size:0.55rem; color:#555; text-transform:uppercase; margin-bottom:3px; }
+        .q-value { font-size:0.82rem; font-weight:700; font-family:'JetBrains Mono',monospace; }
+
+        .gauge-section { background:var(--card); border:1px solid var(--border); border-radius:22px; padding:28px 22px; margin-bottom:18px; text-align:center; position:relative; overflow:hidden; }
+        .gauge-container { position:relative; width:180px; height:180px; margin:0 auto 22px; }
+        .gauge-svg { transform:rotate(-90deg); width:100%; height:100%; }
+        .gauge-svg circle { fill:none; stroke-width:11; stroke-linecap:round; }
+        .gauge-svg .track { stroke:rgba(255,255,255,0.02); }
+        .gauge-svg .fill { stroke:var(--cyan); transition:stroke-dashoffset 2s cubic-bezier(0.4,0,0.2,1); stroke-dasharray:553; stroke-dashoffset:553; }
+        .gauge-center { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); }
+        .g-percent { font-size:2.8rem; font-weight:900; font-family:'JetBrains Mono',monospace; background:linear-gradient(135deg, var(--cyan), var(--blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+        .progress-section { background:var(--card); border:1px solid var(--border); border-radius:18px; padding:22px; margin-bottom:18px; }
+        .section-label { font-size:0.7rem; color:#666; text-transform:uppercase; letter-spacing:2px; margin-bottom:16px; font-weight:600; display:flex; align-items:center; gap:8px; }
+        .prog-item { margin-bottom:15px; }
+        .prog-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-size:0.78rem; }
+        .prog-track { width:100%; height:7px; background:rgba(255,255,255,0.025); border-radius:10px; overflow:hidden; }
+        .prog-fill { height:100%; border-radius:10px; transition:width 2s ease; position:relative; }
+        .prog-fill.cyan { background:linear-gradient(to right, var(--cyan), var(--blue)); }
+        .prog-fill.gold { background:linear-gradient(to right, var(--gold), var(--orange)); }
+
+        .info-section { background:var(--card); border:1px solid var(--border); border-radius:18px; padding:22px; margin-bottom:18px; }
+        .info-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.02); font-size:0.78rem; }
+        .info-row:last-child { border-bottom:none; }
+
+        .action-btn { width:100%; padding:15px; border-radius:14px; font-weight:700; border:none; cursor:pointer; margin-bottom:10px; text-transform:uppercase; }
+        .btn-refresh { background:rgba(255,255,255,0.05); color:#fff; }
+        .btn-logout { background:rgba(255,59,48,0.1); color:#ff6b6b; }
+
+        .spinner { width:20px; height:20px; border:3px solid rgba(0,0,0,0.1); border-top-color:#000; border-radius:50%; animation:rotate 1s linear infinite; display:none; }
+
+        @media (max-width:600px) { .quick-stats { grid-template-columns:1fr 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="mesh-bg"></div>
+    <div id="particles-js"></div>
+
+    <nav>
+        <a href="#" class="nav-logo">
+            <img src="https://i.ibb.co/Kj3NdKvH/Whats-App-Image-2026-04-21-at-7-52-57-PM-1.jpg" alt="Logo">
+            <span>NetroX VPN</span>
+        </a>
+    </nav>
+
+    <div class="page-wrapper">
+        <div class="main-container">
+
+            <div id="loginArea">
+                <div class="tab-switcher">
+                    <div class="tab-btn active" id="btnTabClient" onclick="switchTab('client')">CLIENT LOGIN</div>
+                    <div class="tab-btn paid-tab" id="btnTabPaid" onclick="switchTab('paid')">PAID USER</div>
+                </div>
+
+                <div id="clientTab" class="tab-content active" style="display:block;">
+                    <div class="login-card">
+                        <h2 style="margin-bottom:5px;">Welcome Back</h2>
+                        <p style="font-size:0.85rem; color:#555; margin-bottom:25px;">Sign in with Firebase credentials.</p>
+                        <div id="clientError" class="status-msg error"></div>
+                        <form onsubmit="handleClientLogin(event)">
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" id="clientEmail" placeholder="your@email.com" required></div>
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" id="clientPass" placeholder="••••••••" required></div>
+                            </div>
+                            <button type="submit" class="login-btn btn-client" id="clientBtn">Sign In <div class="spinner"></div></button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="paidTab" class="tab-content" style="display:none;">
+                    <div class="login-card paid-mode">
+                        <h2 style="margin-bottom:5px; color:var(--gold);">Premium Access</h2>
+                        <p style="font-size:0.85rem; color:#555; margin-bottom:25px;">Enter VPN email to fetch stats.</p>
+                        <div id="paidError" class="status-msg error"></div>
+                        <form onsubmit="handlePaidAccess(event)">
+                            <div class="form-group">
+                                <label>VPN Email Address</label>
+                                <div class="input-wrapper"><i class="fas fa-crown"></i><input type="email" id="paidEmail" placeholder="your@gmail.com" required></div>
+                            </div>
+                            <button type="submit" class="login-btn btn-paid" id="paidBtn">View Dashboard <div class="spinner"></div></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div id="dashboard" class="dashboard">
+                <div class="welcome-banner">
+                    <div class="w-avatar" id="avatarChar">U<div class="online-dot"></div></div>
+                    <div class="w-info">
+                        <div style="font-size:0.6rem; color:#555; text-transform:uppercase;">CORE DASHBOARD</div>
+                        <h2 id="dashName">NETROX USER</h2>
+                        <p id="dashEmail" style="font-size:0.75rem; color:var(--cyan);">loading...</p>
+                    </div>
+                </div>
+
+                <div id="usageArea">
+                    <div class="quick-stats">
+                        <div class="q-stat"><div class="q-label">Used</div><div class="q-value" id="qUsed" style="color:var(--cyan);">--</div></div>
+                        <div class="q-stat"><div class="q-label">Expires</div><div class="q-value" id="qExpire" style="color:var(--gold);">--</div></div>
+                        <div class="q-stat"><div class="q-label">Days Left</div><div class="q-value" id="qDays" style="color:var(--green);">--</div></div>
+                        <div class="q-stat"><div class="q-label">Status</div><div class="q-value" id="qStatus" style="color:var(--green);">Active</div></div>
+                    </div>
+
+                    <div class="gauge-section">
+                        <div class="gauge-container">
+                            <svg class="gauge-svg" viewBox="0 0 200 200">
+                                <circle class="track" cx="100" cy="100" r="88"/>
+                                <circle class="fill" id="gaugeFill" cx="100" cy="100" r="88"/>
+                            </svg>
+                            <div class="gauge-center"><div class="g-percent" id="gPercent">0%</div></div>
+                        </div>
+                        <p style="font-size:0.7rem; color:#555; text-transform:uppercase;">Data Limit Tracking</p>
+                    </div>
+
+                    <div class="progress-section">
+                        <div class="section-label"><i class="fas fa-chart-bar" style="color:var(--cyan);"></i> Usage Breakdown</div>
+                        <div class="prog-item">
+                            <div class="prog-header"><span>Total Data Usage</span><span id="pVal1" style="color:var(--cyan);">0%</span></div>
+                            <div class="prog-track"><div class="prog-fill cyan" id="pFill1" style="width:0%;"></div></div>
+                        </div>
+                        <div class="prog-item">
+                            <div class="prog-header"><span>Validity Period</span><span id="pVal3" style="color:var(--gold);">0%</span></div>
+                            <div class="prog-track"><div class="prog-fill gold" id="pFill3" style="width:0%;"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="info-section">
+                        <div class="info-row"><span class="i-label">Upload</span><span id="iUp" style="color:var(--green);">--</span></div>
+                        <div class="info-row"><span class="i-label">Download</span><span id="iDown" style="color:var(--cyan);">--</span></div>
+                        <div class="info-row"><span class="i-label">Data Limit</span><span id="iLimit" style="color:var(--gold);">--</span></div>
+                        <div class="info-row"><span class="i-label">Expiration</span><span id="iExpireFull" style="color:var(--gold);">--</span></div>
+                    </div>
+                </div>
+
+                <div id="clientMsg" style="display:none; text-align:center; padding:30px; background:var(--card); border-radius:22px;">
+                    <i class="fas fa-user-circle" style="font-size:3rem; color:var(--cyan); margin-bottom:15px;"></i>
+                    <h3>Client Account</h3>
+                    <p style="font-size:0.85rem; color:#555;">Firebase session active.</p>
+                </div>
+
+                <button class="action-btn btn-refresh" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                <button class="action-btn btn-logout" onclick="logout()">Sign Out</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCvUlVKoDIPG_w23ZzyHLpcyRO1yEfqmmU",
+            authDomain: "netrox-database.firebaseapp.com",
+            projectId: "netrox-database",
+            storageBucket: "netrox-database.firebasestorage.app",
+            messagingSenderId: "847178411597",
+            appId: "1:847178411597:web:827582517f94cec141f604"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const workerUrl = "https://shiny-hat-66b7netrox-vpn-proxy.kalpikachampathi.workers.dev/";
+
+        function switchTab(tab) {
+            document.getElementById('clientTab').style.display = (tab === 'client') ? 'block' : 'none';
+            document.getElementById('paidTab').style.display = (tab === 'paid') ? 'block' : 'none';
+            document.getElementById('btnTabClient').classList.toggle('active', tab === 'client');
+            document.getElementById('btnTabPaid').classList.toggle('active', tab === 'paid');
+        }
+
+        async function handleClientLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('clientBtn');
+            btn.disabled = true; btn.querySelector('.spinner').style.display = 'block';
+            try {
+                const cred = await auth.signInWithEmailAndPassword(document.getElementById('clientEmail').value, document.getElementById('clientPass').value);
+                showDashboard(cred.user.email, 'client');
+            } catch (e) {
+                document.getElementById('clientError').textContent = e.message;
+                document.getElementById('clientError').style.display = 'block';
+                btn.disabled = false; btn.querySelector('.spinner').style.display = 'none';
+            }
+        }
+
+        async function handlePaidAccess(e) {
+            e.preventDefault();
+            const email = document.getElementById('paidEmail').value.trim();
+            const btn = document.getElementById('paidBtn');
+            btn.disabled = true; btn.querySelector('.spinner').style.display = 'block';
+            try {
+                const response = await fetch(workerUrl);
+                const data = await response.json();
+                let found = null;
+                for (const inbound of data.obj) {
+                    const settings = JSON.parse(inbound.settings);
+                    const client = settings.clients.find(c => c.email.toLowerCase() === email.toLowerCase());
+                    if (client) {
+                        const stats = inbound.clientStats.find(s => s.email.toLowerCase() === email.toLowerCase());
+                        found = { ...client, ...stats }; break;
+                    }
+                }
+                if (found) showDashboard(email, 'paid', found);
+                else throw new Error("VPN Email not found.");
+            } catch (e) {
+                document.getElementById('paidError').textContent = e.message;
+                document.getElementById('paidError').style.display = 'block';
+                btn.disabled = false; btn.querySelector('.spinner').style.display = 'none';
+            }
+        }
+
+        function showDashboard(email, type, vpn = null) {
+            document.getElementById('loginArea').style.display = 'none';
+            document.getElementById('dashboard').classList.add('active');
+            document.getElementById('dashEmail').textContent = email;
+            document.getElementById('dashName').textContent = email.split('@')[0].toUpperCase();
+            document.getElementById('avatarChar').textContent = email.charAt(0).toUpperCase();
+            if(type === 'paid' && vpn) {
+                document.getElementById('usageArea').style.display = 'block';
+                renderPaidStats(vpn);
+            } else {
+                document.getElementById('clientMsg').style.display = 'block';
+            }
+        }
+
+        function renderPaidStats(d) {
+            const up = d.up || 0, down = d.down || 0, used = up + down, limit = d.total || 0;
+            document.getElementById('qUsed').textContent = formatBytes(used);
+            document.getElementById('iUp').textContent = formatBytes(up);
+            document.getElementById('iDown').textContent = formatBytes(down);
+            document.getElementById('iLimit').textContent = limit > 0 ? formatBytes(limit) : "∞";
+
+            if (limit > 0) {
+                const pct = Math.floor(Math.min((used / limit) * 100, 100));
+                document.getElementById('gPercent').textContent = pct + "%";
+                document.getElementById('gaugeFill').style.strokeDashoffset = 553 - (pct / 100) * 553;
+                document.getElementById('pFill1').style.width = pct + "%";
+                document.getElementById('pVal1').textContent = pct + "%";
+            }
+
+            if (d.expiryTime && d.expiryTime > 0) {
+                const expDate = new Date(d.expiryTime);
+                const now = new Date();
+                const diff = expDate - now;
+                const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+                
+                document.getElementById('qExpire').textContent = expDate.toLocaleDateString('en-GB', {day:'numeric', month:'short'});
+                document.getElementById('iExpireFull').textContent = expDate.toLocaleDateString();
+                document.getElementById('qDays').textContent = days > 0 ? days : "0";
+                
+                const valPct = Math.max(0, Math.min(100, Math.floor((days / 30) * 100)));
+                document.getElementById('pFill3').style.width = valPct + "%";
+                document.getElementById('pVal3').textContent = days + " Days Left";
+                
+                if(days <= 0) document.getElementById('qStatus').textContent = "Expired";
+            } else {
+                document.getElementById('qExpire').textContent = "∞";
+                document.getElementById('qDays').textContent = "∞";
+                document.getElementById('iExpireFull').textContent = "Lifetime";
+                document.getElementById('pFill3').style.width = "100%";
+                document.getElementById('pVal3').textContent = "∞";
+            }
+        }
+
+        function formatBytes(b) {
+            if (b === 0) return '0 B';
+            const k = 1024, sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(b) / Math.log(k));
+            return parseFloat((b / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function logout() { location.reload(); }
+
+        particlesJS('particles-js', {
+            particles: { number: { value: 40 }, color: { value: '#00d2ff' }, opacity: { value: 0.1 }, size: { value: 2 }, line_linked: { enable: true, distance: 150, color: '#00d2ff', opacity: 0.05 }, move: { speed: 1 } }
+        });
+    </script>
+</body>
+</html>
