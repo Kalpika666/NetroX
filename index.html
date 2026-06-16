@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetroX VPN – Fast, Secure & Unlimited</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: 0.8s;
+        }
+
+        .preloader.hide { opacity: 0; pointer-events: none; }
+
+        .preloader-logo {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #00d2ff;
+            text-shadow: 0 0 30px rgba(0,210,255,0.6);
+            animation: pulse 1.5s infinite;
+            margin-bottom: 20px;
+        }
+
+        .preloader-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .preloader-bar::after {
+            content: '';
+            display: block;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border-radius: 10px;
+            animation: loading 1.2s ease-in-out infinite;
+        }
+
+        @keyframes loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(350%); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.98); } }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            z-index: 1000;
+            transition: 0.3s;
+        }
+
+        nav.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+            box-shadow: 0 5px 30px rgba(0,0,0,0.5);
+            padding: 10px 8%;
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #00d2ff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(0,210,255,0.4);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #999;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #00d2ff;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: #00d2ff; }
+        .nav-links a:hover::after { width: 100%; }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 10px 22px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn.client {
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+        }
+
+        .nav-btn.client:hover {
+            border-color: #00d2ff;
+            color: #00d2ff;
+            box-shadow: 0 0 15px rgba(0,210,255,0.2);
+        }
+
+        .nav-btn.paid {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: #000;
+            box-shadow: 0 4px 15px rgba(255,215,0,0.3);
+        }
+
+        .nav-btn.paid:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(255,215,0,0.5);
+        }
+
+        .nav-btn.order {
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            color: #000;
+        }
+
+        .nav-btn:hover { transform: scale(1.05); }
+
+        .hamburger {
+            display: none;
+            font-size: 24px;
+            color: #00d2ff;
+            cursor: pointer;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 8% 80px;
+            position: relative;
+        }
+
+        .hero-badge {
+            background: rgba(0,210,255,0.1);
+            border: 1px solid rgba(0,210,255,0.3);
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #00d2ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            animation: fadeInDown 1s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero-badge .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5, #00d2ff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: #888;
+            max-width: 700px;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease 0.4s both;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .hero-btn {
+            padding: 16px 45px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.4s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-btn.primary {
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            color: #000;
+            box-shadow: 0 5px 30px rgba(0,210,255,0.4);
+        }
+
+        .hero-btn.secondary {
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.2);
+            color: #fff;
+        }
+
+        .hero-btn.gold {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: #000;
+            box-shadow: 0 5px 30px rgba(255,215,0,0.4);
+        }
+
+        .hero-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,210,255,0.5); }
+        .hero-btn.secondary:hover { border-color: #00d2ff; color: #00d2ff; }
+        .hero-btn.gold:hover { box-shadow: 0 15px 40px rgba(255,215,0,0.5); }
+
+        .scroll-indicator { position: absolute; bottom: 30px; animation: bounce 2s infinite; }
+        .scroll-indicator i { font-size: 24px; color: #00d2ff; opacity: 0.5; }
+
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-15px); } 60% { transform: translateY(-8px); } }
+
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 60px;
+            padding: 50px 8%;
+            background: rgba(0,210,255,0.02);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-item { text-align: center; }
+        .stat-item .number { font-size: 3rem; font-weight: 800; color: #00d2ff; text-shadow: 0 0 20px rgba(0,210,255,0.3); }
+        .stat-item .label { font-size: 0.85rem; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; }
+
+        .section { padding: 100px 8%; }
+
+        .section-title { text-align: center; margin-bottom: 60px; }
+
+        .section-title .tag {
+            display: inline-block;
+            background: rgba(0,210,255,0.1);
+            border: 1px solid rgba(0,210,255,0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #00d2ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .section-title h2 { font-size: 2.8rem; font-weight: 800; margin-bottom: 15px; }
+        .section-title p { color: #666; max-width: 600px; margin: auto; font-size: 1.05rem; }
+
+        .download-section { background: linear-gradient(180deg, rgba(0,210,255,0.03) 0%, transparent 100%); }
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .download-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(0,210,255,0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: 0.4s;
+        }
+
+        .download-card:hover::before { opacity: 1; }
+        .download-card:hover { transform: translateY(-10px); border-color: rgba(0,210,255,0.3); box-shadow: 0 20px 50px rgba(0,210,255,0.15); }
+
+        .download-card .icon {
+            width: 80px; height: 80px;
+            border-radius: 20px;
+            background: rgba(0,210,255,0.1);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 25px;
+            position: relative; z-index: 1;
+        }
+
+        .download-card .icon i { font-size: 35px; color: #00d2ff; }
+        .download-card h3 { font-size: 1.4rem; margin-bottom: 10px; position: relative; z-index: 1; }
+        .download-card p { color: #888; font-size: 0.9rem; margin-bottom: 25px; position: relative; z-index: 1; }
+
+        .download-card .version {
+            display: inline-block;
+            background: rgba(0,210,255,0.1);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            color: #00d2ff;
+            margin-bottom: 20px;
+            position: relative; z-index: 1;
+        }
+
+        .download-btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 14px 35px; border-radius: 50px;
+            text-decoration: none; font-weight: 700; font-size: 14px;
+            text-transform: uppercase; letter-spacing: 1px;
+            transition: 0.3s; position: relative; z-index: 1;
+        }
+
+        .download-btn.android { background: linear-gradient(135deg, #3ddc84, #00c853); color: #000; }
+        .download-btn.windows { background: linear-gradient(135deg, #00a4ef, #0078d4); color: #fff; }
+        .download-btn.ios { background: linear-gradient(135deg, #3ddc84, #00c853); color: #000; }
+        .download-btn:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+        .networks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .network-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 25px 20px; border-radius: 15px;
+            text-align: center; transition: 0.4s;
+        }
+
+        .network-item i { font-size: 30px; color: #00d2ff; margin-bottom: 12px; display: block; }
+        .network-item span { font-size: 0.95rem; font-weight: 500; }
+
+        .network-item:hover {
+            background: rgba(0,210,255,0.1);
+            border-color: rgba(0,210,255,0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,210,255,0.1);
+        }
+
+        .pricing-grid { display: flex; justify-content: center; flex-wrap: wrap; gap: 25px; }
+
+        .price-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 25px; padding: 45px 35px;
+            width: 350px; text-align: center;
+            position: relative; overflow: hidden; transition: 0.5s;
+        }
+
+        .price-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 4px;
+            background: linear-gradient(to right, transparent, #00d2ff, transparent);
+            opacity: 0; transition: 0.5s;
+        }
+
+        .price-card:hover::before { opacity: 1; }
+        .price-card:hover { transform: translateY(-15px); border-color: rgba(0,210,255,0.3); box-shadow: 0 25px 60px rgba(0,210,255,0.15); }
+
+        .price-card.featured { border: 2px solid #00d2ff; background: rgba(0,210,255,0.03); transform: scale(1.02); }
+        .price-card.featured::before { opacity: 1; }
+
+        .featured-badge {
+            position: absolute; top: 20px; right: -40px;
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            color: #000; padding: 8px 50px;
+            font-size: 11px; font-weight: 800;
+            transform: rotate(45deg);
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .price-card .plan-icon {
+            width: 80px; height: 80px; border-radius: 25px;
+            background: rgba(0,210,255,0.1);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 25px;
+        }
+
+        .price-card .plan-icon i { font-size: 32px; color: #00d2ff; }
+        .price-card h3 { font-size: 1.6rem; font-weight: 700; margin-bottom: 5px; }
+
+        .price-card .amount {
+            font-size: 3.5rem; font-weight: 900; color: #00d2ff;
+            display: block; margin: 20px 0;
+            text-shadow: 0 0 30px rgba(0,210,255,0.3);
+        }
+
+        .price-card .amount small { font-size: 1rem; color: #888; font-weight: 400; }
+
+        .price-card .validity-tag {
+            display: inline-block;
+            background: rgba(0,210,255,0.1);
+            padding: 8px 20px; border-radius: 50px;
+            font-size: 0.85rem; color: #00d2ff;
+            margin-bottom: 30px; font-weight: 600;
+        }
+
+        .price-card ul { list-style: none; text-align: left; margin-bottom: 30px; }
+
+        .price-card ul li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            font-size: 0.95rem; color: #ccc;
+            display: flex; align-items: center; gap: 12px;
+        }
+
+        .price-card ul li i { color: #00d2ff; font-size: 14px; }
+
+        .price-card .order-btn {
+            display: block; padding: 16px; border-radius: 50px;
+            text-decoration: none; font-weight: 700; font-size: 14px;
+            text-transform: uppercase; transition: 0.3s; letter-spacing: 1px;
+        }
+
+        .price-card .order-btn.outline { border: 2px solid rgba(255,255,255,0.15); color: #fff; }
+        .price-card .order-btn.filled { background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: #000; box-shadow: 0 5px 25px rgba(0,210,255,0.3); }
+        .price-card .order-btn:hover { transform: scale(1.03); box-shadow: 0 10px 30px rgba(0,210,255,0.4); }
+        .price-card .order-btn.outline:hover { border-color: #00d2ff; color: #00d2ff; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px; padding: 40px 30px; transition: 0.4s;
+        }
+
+        .feature-box:hover { border-color: rgba(0,210,255,0.2); transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+
+        .feature-box .icon {
+            width: 60px; height: 60px; border-radius: 15px;
+            background: rgba(0,210,255,0.1);
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .feature-box .icon i { font-size: 24px; color: #00d2ff; }
+        .feature-box h4 { margin-bottom: 12px; font-size: 1.2rem; }
+        .feature-box p { color: #666; font-size: 0.95rem; line-height: 1.7; }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px; max-width: 1000px; margin: 0 auto;
+        }
+
+        .step-card { text-align: center; padding: 30px; }
+
+        .step-card .step-number {
+            width: 60px; height: 60px; border-radius: 50%;
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: 800; color: #000;
+            margin: 0 auto 20px;
+        }
+
+        .step-card h4 { margin-bottom: 10px; font-size: 1.1rem; }
+        .step-card p { color: #666; font-size: 0.9rem; }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .testimonial-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px; padding: 35px; transition: 0.4s;
+        }
+
+        .testimonial-card:hover { border-color: rgba(0,210,255,0.2); transform: translateY(-5px); }
+        .testimonial-card .stars { color: #ffc107; margin-bottom: 15px; }
+        .testimonial-card p { color: #ccc; font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+        .testimonial-card .user { display: flex; align-items: center; gap: 15px; }
+
+        .testimonial-card .avatar {
+            width: 50px; height: 50px; border-radius: 50%;
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1.2rem; color: #000;
+        }
+
+        .testimonial-card .name { font-weight: 600; }
+        .testimonial-card .role { font-size: 0.8rem; color: #666; }
+
+        .faq-container { max-width: 800px; margin: 0 auto; }
+
+        .faq-item {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 15px; margin-bottom: 15px;
+            overflow: hidden; transition: 0.3s;
+        }
+
+        .faq-item:hover { border-color: rgba(0,210,255,0.2); }
+
+        .faq-question {
+            padding: 25px; cursor: pointer;
+            display: flex; justify-content: space-between;
+            align-items: center; font-weight: 600; transition: 0.3s;
+        }
+
+        .faq-question:hover { color: #00d2ff; }
+        .faq-question i { transition: 0.3s; color: #00d2ff; }
+        .faq-item.active .faq-question i { transform: rotate(180deg); }
+
+        .faq-answer {
+            max-height: 0; overflow: hidden; transition: 0.4s;
+            padding: 0 25px; color: #888; line-height: 1.8;
+        }
+
+        .faq-item.active .faq-answer { max-height: 200px; padding: 0 25px 25px; }
+
+        .contact-section { background: linear-gradient(180deg, transparent 0%, rgba(0,210,255,0.03) 100%); }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px; max-width: 900px; margin: 0 auto;
+        }
+
+        .contact-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px; padding: 35px;
+            text-align: center; transition: 0.4s;
+        }
+
+        .contact-card:hover { transform: translateY(-8px); border-color: rgba(0,210,255,0.3); box-shadow: 0 20px 50px rgba(0,210,255,0.1); }
+
+        .contact-card .icon {
+            width: 70px; height: 70px; border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px; font-size: 28px;
+        }
+
+        .contact-card.whatsapp .icon { background: rgba(37,211,102,0.1); color: #25d366; }
+        .contact-card.telegram .icon { background: rgba(0,136,204,0.1); color: #0088cc; }
+
+        .contact-card h4 { margin-bottom: 8px; font-size: 1.2rem; }
+        .contact-card p { color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+
+        .contact-card .contact-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 30px; border-radius: 50px;
+            text-decoration: none; font-weight: 600; font-size: 14px; transition: 0.3s;
+        }
+
+        .contact-card.whatsapp .contact-link { background: #25d366; color: #fff; }
+        .contact-card.telegram .contact-link { background: #0088cc; color: #fff; }
+        .contact-card .contact-link:hover { transform: scale(1.05); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+
+        .extra-contacts {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 15px; margin-top: 40px;
+        }
+
+        .extra-btn {
+            padding: 15px 35px; border-radius: 50px;
+            text-decoration: none; font-weight: 600; font-size: 14px;
+            display: flex; align-items: center; gap: 10px; transition: 0.3s;
+        }
+
+        .extra-btn.group { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; }
+        .extra-btn.website { background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: #000; }
+        .extra-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+        /* ====== FOOTER ====== */
+        footer {
+            padding: 80px 8% 30px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px; margin-bottom: 50px;
+        }
+
+        .footer-brand h3 { font-size: 1.8rem; color: #00d2ff; margin-bottom: 15px; text-shadow: 0 0 20px rgba(0,210,255,0.3); }
+        .footer-brand p { color: #555; font-size: 0.95rem; line-height: 1.8; max-width: 350px; }
+
+        .footer-links h4 { margin-bottom: 20px; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; color: #888; }
+        .footer-links a { display: block; color: #555; text-decoration: none; margin-bottom: 12px; font-size: 0.95rem; transition: 0.3s; }
+        .footer-links a:hover { color: #00d2ff; padding-left: 5px; }
+
+        .footer-social { display: flex; gap: 15px; margin-top: 20px; }
+
+        .footer-social a {
+            width: 45px; height: 45px; border-radius: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex; align-items: center; justify-content: center;
+            color: #888; font-size: 18px; transition: 0.3s;
+        }
+
+        .footer-social a:hover { background: #00d2ff; color: #000; transform: translateY(-3px); }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 25px;
+            display: flex; justify-content: space-between;
+            align-items: center; flex-wrap: wrap; gap: 15px;
+        }
+
+        .footer-bottom p { font-size: 0.85rem; color: #444; }
+        .footer-bottom a { color: #00d2ff; text-decoration: none; }
+
+        /* ====== DEVELOPER BADGE ====== */
+        .developer-badge {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-top: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .developer-badge p {
+            font-size: 0.75rem;
+            color: #333;
+            letter-spacing: 1px;
+        }
+
+        .developer-badge a {
+            color: #00d2ff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .developer-badge a:hover {
+            color: #3a7bd5;
+            text-shadow: 0 0 10px rgba(0,210,255,0.3);
+        }
+
+        /* ====== MOBILE MENU ====== */
+        .mobile-menu {
+            display: none;
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(10,10,10,0.98);
+            backdrop-filter: blur(20px);
+            z-index: 999;
+            flex-direction: column;
+            align-items: center; justify-content: center; gap: 25px;
+        }
+
+        .mobile-menu.active { display: flex; }
+        .mobile-menu a { color: #fff; text-decoration: none; font-size: 1.3rem; font-weight: 600; transition: 0.3s; }
+        .mobile-menu a:hover { color: #00d2ff; }
+
+        .mobile-menu .mobile-btns { display: flex; gap: 10px; margin-top: 20px; }
+        .mobile-menu .mobile-btns a { padding: 12px 25px; border-radius: 50px; font-size: 0.9rem; }
+        .mobile-menu .mobile-btns .m-client { border: 1px solid rgba(255,255,255,0.2); color: #fff; }
+        .mobile-menu .mobile-btns .m-paid { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; }
+
+        .close-menu { position: absolute; top: 20px; right: 30px; font-size: 30px; color: #00d2ff; cursor: pointer; }
+
+        .back-to-top {
+            position: fixed; bottom: 30px; right: 30px;
+            width: 50px; height: 50px; border-radius: 15px;
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            color: #000; display: flex; align-items: center; justify-content: center;
+            font-size: 20px; cursor: pointer;
+            opacity: 0; visibility: hidden; transition: 0.4s; z-index: 999;
+        }
+
+        .back-to-top.show { opacity: 1; visibility: visible; }
+        .back-to-top:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,210,255,0.4); }
+
+        @media (max-width: 1024px) { .footer-content { grid-template-columns: 1fr 1fr; } }
+
+        @media (max-width: 768px) {
+            .nav-links, .nav-buttons { display: none; }
+            .hamburger { display: block; }
+            .hero h1 { font-size: 2rem; }
+            .stats-bar { gap: 30px; }
+            .section { padding: 60px 5%; }
+            .section-title h2 { font-size: 2rem; }
+            .footer-content { grid-template-columns: 1fr; text-align: center; }
+            .footer-brand p { max-width: 100%; }
+            .footer-social { justify-content: center; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+            .price-card.featured { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="preloader" id="preloader">
+        <span class="preloader-logo">NETROX VPN</span>
+        <div class="preloader-bar"></div>
+    </div>
+
+    <div id="particles-js"></div>
+
+    <div class="back-to-top" id="backToTop" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="close-menu" onclick="toggleMenu()"><i class="fas fa-times"></i></div>
+        <a href="#home" onclick="toggleMenu()">Home</a>
+        <a href="#download" onclick="toggleMenu()">Download</a>
+        <a href="#networks" onclick="toggleMenu()">Networks</a>
+        <a href="#pricing" onclick="toggleMenu()">Pricing</a>
+        <a href="#features" onclick="toggleMenu()">Features</a>
+        <a href="#contact" onclick="toggleMenu()">Contact</a>
+        <div class="mobile-btns">
+            <a href="login.html" class="m-client" onclick="toggleMenu()"><i class="fas fa-user"></i> Client</a>
+            <a href="login.html" class="m-paid" onclick="toggleMenu()"><i class="fas fa-crown"></i> Paid User</a>
+        </div>
+    </div>
+
+    <nav id="navbar">
+        <a href="#" class="nav-logo"><i class="fas fa-shield-alt"></i> NetroX VPN</a>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#download">Download</a></li>
+            <li><a href="#networks">Networks</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="nav-buttons">
+            <a href="login.html" class="nav-btn client"><i class="fas fa-user"></i> Client</a>
+            <a href="login.html" class="nav-btn paid"><i class="fas fa-crown"></i> Paid User</a>
+            <a href="https://wa.me/94760216144" class="nav-btn order"><i class="fab fa-whatsapp"></i> Order</a>
+        </div>
+        <div class="hamburger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-badge"><span class="live-dot"></span> Premium VPN Service - Servers Online</div>
+        <h1><span class="gradient-text">NetroX VPN</span><br>Fast, Secure & Unlimited</h1>
+        <p>Get all the protection you need for your online privacy, and fast connection to Zoom, Netflix, gaming with NetroX VPN. With exclusive data plans and a large server network. 🔐</p>
+        <div class="hero-buttons">
+            <a href="#download" class="hero-btn primary"><i class="fas fa-download"></i> Download App</a>
+            <a href="#pricing" class="hero-btn secondary"><i class="fas fa-bolt"></i> View Plans</a>
+            <a href="login.html" class="hero-btn gold"><i class="fas fa-crown"></i> Paid User Login</a>
+        </div>
+        <div class="scroll-indicator"><i class="fas fa-chevron-down"></i></div>
+    </section>
+
+    <div class="stats-bar">
+        <div class="stat-item" data-aos="fade-up"><div class="number">1000+</div><div class="label">Happy Users</div></div>
+        <div class="stat-item" data-aos="fade-up" data-aos-delay="100"><div class="number">99.9%</div><div class="label">Uptime</div></div>
+        <div class="stat-item" data-aos="fade-up" data-aos-delay="200"><div class="number">15+</div><div class="label">Servers</div></div>
+        <div class="stat-item" data-aos="fade-up" data-aos-delay="300"><div class="number">24/7</div><div class="label">Support</div></div>
+    </div>
+
+    <section class="section download-section" id="download">
+        <div class="section-title">
+            <span class="tag" data-aos="fade-up">📥 Download</span>
+            <h2 data-aos="fade-up" data-aos-delay="100">Get NetroX VPN App</h2>
+            <p data-aos="fade-up" data-aos-delay="200">Download our app for your device and start browsing securely</p>
+        </div>
+        <div class="download-grid">
+            <div class="download-card" data-aos="fade-up">
+                <div class="icon"><i class="fab fa-android"></i></div>
+                <h3>Android</h3><p>Works on all Android 5.0+ devices</p>
+                <span class="version">Latest</span>
+                <a href="https://play.google.com/store/apps/details?id=com.netmod.syna" class="download-btn android"><i class="fas fa-download"></i> Download APK</a>
+            </div>
+            <div class="download-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="icon"><i class="fab fa-windows"></i></div>
+                <h3>Windows</h3><p>Compatible with Windows 7, 8, 10, 11</p>
+                <span class="version">Latest</span>
+                <a href="https://netmod-vpn-client.en.uptodown.com/windows" class="download-btn windows"><i class="fas fa-download"></i> Download EXE</a>
+            </div>
+            <div class="download-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="icon"><i class="fab fa-apple"></i></div>
+                <h3>iOS</h3><p>iPhone & iPad coming soon</p>
+                <span class="version">Latest</span>
+                <a href="https://apps.apple.com/us/app/v2box-v2ray-client/id6446814690" class="download-btn ios"><i class="fas fa-clock"></i> Download</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="networks">
+        <div class="section-title">
+            <span class="tag" data-aos="fade-up">📡 Networks</span>
+            <h2 data-aos="fade-up" data-aos-delay="100">Supported Networks</h2>
+            <p data-aos="fade-up" data-aos-delay="200">Connect through all major Sri Lankan networks</p>
+        </div>
+        <div class="networks-grid">
+            <div class="network-item" data-aos="fade-up"><i class="fas fa-video"></i><span>Dialog Zoom</span></div>
+            <div class="network-item" data-aos="fade-up" data-aos-delay="50"><i class="fab fa-tiktok"></i><span>Dialog Tiktok</span></div>
+            <div class="network-item" data-aos="fade-up" data-aos-delay="100"><i class="fas fa-video"></i><span>SLT Zoom</span></div>
+            <div class="network-item" data-aos="fade-up" data-aos-delay="150"><i class="fas fa-play-circle"></i><span>SLT Netflix</span></div>
+            <div class="network-item" data-aos="fade-up" data-aos-delay="200"><i class="fas fa-video"></i><span>Mobitel Zoom</span></div>
+            <div class="network-item" data-aos="fade-up" data-aos-delay="250"><i class="fas fa-video"></i><span>Hutch Zoom</span></div>
+            <div class="network-item" data-aos="fade-up" data-aos-delay="300"><i class="fas fa-gamepad"></i><span>Hutch Gaming</span></div>
+            <div class="network-item" data-aos="fade-up" data-aos-delay="350"><i class="fas fa-share-alt"></i><span>Hutch Social</span></div>
+            <div class="network-item" data-aos="fade-up" data-aos-delay="400"><i class="fas fa-video"></i><span>Airtel Zoom</span></div>
+            <div class="network-item" data-aos="fade-up" data-aos-delay="450"><i class="fab fa-tiktok"></i><span>Airtel Tiktok</span></div>
+            <div class="network-item" data-aos="fade-up" data-aos-delay="500"><i class="fas fa-bolt"></i><span>Airtel 389 / 909</span></div>
+        </div>
+    </section>
+
+    <section class="section" id="pricing">
+        <div class="section-title">
+            <span class="tag" data-aos="fade-up">💎 Pricing</span>
+            <h2 data-aos="fade-up" data-aos-delay="100">Exclusive Price Plans</h2>
+            <p data-aos="fade-up" data-aos-delay="200">Choose the perfect plan for your needs</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="price-card" data-aos="fade-up">
+                <div class="plan-icon"><i class="fas fa-database"></i></div>
+                <h3>Starter</h3>
+                <span class="amount">Rs.150</span>
+                <span class="validity-tag">💾 100GB • 14 Days</span>
+                <ul>
+                    <li><i class="fas fa-check"></i> High Speed Servers</li>
+                    <li><i class="fas fa-check"></i> All Networks Supported</li>
+                    <li><i class="fas fa-check"></i> Zoom & Netflix Access</li>
+                    <li><i class="fas fa-check"></i> 24/7 Customer Support</li>
+                    <li><i class="fas fa-check"></i> Easy Setup Guide</li>
+                </ul>
+                <a href="https://wa.me/94760216144?text=Hello!%20I%20want%20100GB%20Plan%20(Rs.150)" class="order-btn outline"><i class="fab fa-whatsapp"></i> Order Now</a>
+            </div>
+            <div class="price-card featured" data-aos="fade-up" data-aos-delay="100">
+                <div class="featured-badge">BEST VALUE</div>
+                <div class="plan-icon"><i class="fas fa-server"></i></div>
+                <h3>Standard</h3>
+                <span class="amount">Rs.200</span>
+                <span class="validity-tag">💾 200GB • 30 Days</span>
+                <ul>
+                    <li><i class="fas fa-check"></i> Super Fast Connection</li>
+                    <li><i class="fas fa-check"></i> All Networks Supported</li>
+                    <li><i class="fas fa-check"></i> Gaming + Streaming</li>
+                    <li><i class="fas fa-check"></i> Priority Support</li>
+                    <li><i class="fas fa-check"></i> Multi Device Support</li>
+                </ul>
+                <a href="https://wa.me/94760216144?text=Hello!%20I%20want%20200GB%20Plan%20(Rs.200)" class="order-btn filled"><i class="fab fa-whatsapp"></i> Order Now</a>
+            </div>
+            <div class="price-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="plan-icon"><i class="fas fa-infinity"></i></div>
+                <h3>Unlimited</h3>
+                <span class="amount">Rs.450</span>
+                <span class="validity-tag">♾️ Unlimited • 30 Days</span>
+                <ul>
+                    <li><i class="fas fa-check"></i> No Data Limits</li>
+                    <li><i class="fas fa-check"></i> Ultra Low Latency</li>
+                    <li><i class="fas fa-check"></i> VIP Premium Servers</li>
+                    <li><i class="fas fa-check"></i> Netflix 4K Streaming</li>
+                    <li><i class="fas fa-check"></i> Dedicated Support</li>
+                </ul>
+                <a href="https://wa.me/94760216144?text=Hello!%20I%20want%20Unlimited%20Plan%20(Rs.450)" class="order-btn outline"><i class="fab fa-whatsapp"></i> Order Now</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="features">
+        <div class="section-title">
+            <span class="tag" data-aos="fade-up">⚡ Features</span>
+            <h2 data-aos="fade-up" data-aos-delay="100">Why Choose NetroX VPN?</h2>
+            <p data-aos="fade-up" data-aos-delay="200">Built for speed, security, and reliability</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-box" data-aos="fade-up"><div class="icon"><i class="fas fa-bolt"></i></div><h4>High-Speed Servers</h4><p>Blazing fast connections optimized for streaming and gaming without any lag.</p></div>
+            <div class="feature-box" data-aos="fade-up" data-aos-delay="100"><div class="icon"><i class="fas fa-shield-alt"></i></div><h4>Top Security</h4><p>Military-grade encryption to keep your online activity private and secure.</p></div>
+            <div class="feature-box" data-aos="fade-up" data-aos-delay="200"><div class="icon"><i class="fas fa-globe"></i></div><h4>Global Coverage</h4><p>Access servers worldwide for unrestricted browsing and content access.</p></div>
+            <div class="feature-box" data-aos="fade-up" data-aos-delay="300"><div class="icon"><i class="fas fa-mobile-alt"></i></div><h4>All Devices</h4><p>Easy to use on Android, iOS, Windows, Mac and all devices.</p></div>
+            <div class="feature-box" data-aos="fade-up" data-aos-delay="400"><div class="icon"><i class="fas fa-headset"></i></div><h4>24/7 Support</h4><p>Our dedicated support team is always ready to help you.</p></div>
+            <div class="feature-box" data-aos="fade-up" data-aos-delay="500"><div class="icon"><i class="fas fa-rocket"></i></div><h4>No Bandwidth Limit</h4><p>Enjoy unlimited bandwidth with no throttling at all.</p></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-title">
+            <span class="tag" data-aos="fade-up">🚀 How It Works</span>
+            <h2 data-aos="fade-up" data-aos-delay="100">Get Started in 3 Steps</h2>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card" data-aos="fade-up"><div class="step-number">1</div><h4>Download App</h4><p>Download the Netmod/V2Box app for your device.</p></div>
+            <div class="step-card" data-aos="fade-up" data-aos-delay="100"><div class="step-number">2</div><h4>Get Your Plan</h4><p>Choose a plan and contact us on WhatsApp.</p></div>
+            <div class="step-card" data-aos="fade-up" data-aos-delay="200"><div class="step-number">3</div><h4>Connect & Enjoy</h4><p>Enter your key and enjoy secure browsing!</p></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-title">
+            <span class="tag" data-aos="fade-up">💬 Reviews</span>
+            <h2 data-aos="fade-up" data-aos-delay="100">What Our Users Say</h2>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card" data-aos="fade-up">
+                <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <p>"NetroX VPN is amazing! Super fast speeds with Dialog Zoom. Highly recommended!"</p>
+                <div class="user"><div class="avatar">K</div><div><div class="name">Kavindu</div><div class="role">Dialog User</div></div></div>
+            </div>
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <p>"Best VPN for gaming! No lag at all with Hutch Gaming. The 200GB plan is perfect!"</p>
+                <div class="user"><div class="avatar">S</div><div><div class="name">Supun</div><div class="role">Hutch Gaming User</div></div></div>
+            </div>
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <p>"Netflix works perfectly with SLT! Great service and awesome support team."</p>
+                <div class="user"><div class="avatar">N</div><div><div class="name">Nimashi</div><div class="role">SLT Netflix User</div></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-title">
+            <span class="tag" data-aos="fade-up">❓ FAQ</span>
+            <h2 data-aos="fade-up" data-aos-delay="100">Frequently Asked Questions</h2>
+        </div>
+        <div class="faq-container">
+            <div class="faq-item" data-aos="fade-up"><div class="faq-question" onclick="toggleFaq(this)">How do I activate my VPN key?<i class="fas fa-chevron-down"></i></div><div class="faq-answer">After purchasing, you'll receive a key via WhatsApp. Open the NetroX VPN app, enter your key and connect!</div></div>
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="100"><div class="faq-question" onclick="toggleFaq(this)">Which networks are supported?<i class="fas fa-chevron-down"></i></div><div class="faq-answer">We support Dialog, SLT, Mobitel, Hutch, and Airtel networks including Zoom, Netflix, TikTok, Gaming packs.</div></div>
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="200"><div class="faq-question" onclick="toggleFaq(this)">Can I use on multiple devices?<i class="fas fa-chevron-down"></i></div><div class="faq-answer">Yes! Standard and Unlimited plans support multiple devices simultaneously.</div></div>
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="300"><div class="faq-question" onclick="toggleFaq(this)">What payment methods do you accept?<i class="fas fa-chevron-down"></i></div><div class="faq-answer">We accept bank transfers, eZ Cash, mCash, and other mobile payments. Contact us on WhatsApp for details.</div></div>
+        </div>
+    </section>
+
+    <section class="section contact-section" id="contact">
+        <div class="section-title">
+            <span class="tag" data-aos="fade-up">📞 Contact</span>
+            <h2 data-aos="fade-up" data-aos-delay="100">Get In Touch</h2>
+            <p data-aos="fade-up" data-aos-delay="200">We're here to help you 24/7</p>
+        </div>
+        <div class="contact-grid">
+            <div class="contact-card whatsapp" data-aos="fade-up">
+                <div class="icon"><i class="fab fa-whatsapp"></i></div>
+                <h4>WhatsApp</h4>
+                <p>Chat with us for orders and support</p>
+                <a href="https://wa.me/94760216144" class="contact-link"><i class="fab fa-whatsapp"></i> +94 76 021 6144</a>
+            </div>
+            <div class="contact-card telegram" data-aos="fade-up" data-aos-delay="100">
+                <div class="icon"><i class="fab fa-telegram-plane"></i></div>
+                <h4>Telegram</h4>
+                <p>Join our channel for updates</p>
+                <a href="https://t.me/NetroX_VPN" class="contact-link"><i class="fab fa-telegram-plane"></i> @NetroX_VPN</a>
+            </div>
+        </div>
+        <div class="extra-contacts" data-aos="fade-up" data-aos-delay="200">
+            <a href="https://t.me/+7eqF9wWpVBQ4Nzll" class="extra-btn group"><i class="fas fa-users"></i> Join Community</a>
+            <a href="https://netrox.site/" class="extra-btn website"><i class="fas fa-globe"></i> Official Website</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3><i class="fas fa-shield-alt"></i> NetroX VPN</h3>
+                <p>Your gateway to unlimited streaming & secure browsing! Fast, secure, and always reliable.</p>
+                <div class="footer-social">
+                    <a href="https://t.me/NetroX_VPN"><i class="fab fa-telegram"></i></a>
+                    <a href="https://wa.me/94760216144"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://t.me/+7eqF9wWpVBQ4Nzll"><i class="fas fa-users"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <a href="#home">Home</a>
+                <a href="#download">Download</a>
+                <a href="#pricing">Pricing</a>
+                <a href="login.html">Client Login</a>
+                <a href="login.html">Paid User</a>
+            </div>
+            <div class="footer-links">
+                <h4>Networks</h4>
+                <a href="#">Dialog</a>
+                <a href="#">SLT</a>
+                <a href="#">Mobitel</a>
+                <a href="#">Hutch</a>
+                <a href="#">Airtel</a>
+            </div>
+            <div class="footer-links">
+                <h4>Support</h4>
+                <a href="#contact">Contact Us</a>
+                <a href="#">FAQ</a>
+                <a href="#">Setup Guide</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 <a href="#">NetroX VPN</a>. All Rights Reserved.</p>
+            <p>🔒 Built with Security First</p>
+        </div>
+    </footer>
+
+    <!-- Developer Badge -->
+    <div class="developer-badge">
+        <p>Developed by <a href="#">NetroXᵀᴹ</a> </p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+    <script>
+        window.addEventListener('load', () => { setTimeout(() => { document.getElementById('preloader').classList.add('hide'); }, 2000); });
+
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 100, density: { enable: true, value_area: 800 } },
+                color: { value: '#00d2ff' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.3, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1 } },
+                size: { value: 3, random: true, anim: { enable: true, speed: 2, size_min: 0.3 } },
+                line_linked: { enable: true, distance: 150, color: '#00d2ff', opacity: 0.15, width: 1 },
+                move: { enable: true, speed: 1.5, direction: 'none', random: true, out_mode: 'out' }
+            },
+            interactivity: {
+                events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' }, resize: true },
+                modes: { grab: { distance: 140, line_linked: { opacity: 0.5 } }, push: { particles_nb: 4 } }
+            },
+            retina_detect: true
+        });
+
+        AOS.init({ duration: 800, once: true, offset: 100 });
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            const btn = document.getElementById('backToTop');
+            nav.classList.toggle('scrolled', window.scrollY > 50);
+            btn.classList.toggle('show', window.scrollY > 500);
+        });
+
+        function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('active'); }
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        function toggleFaq(el) { el.parentElement.classList.toggle('active'); }
+
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e) {
+                e.preventDefault();
+                const t = document.querySelector(this.getAttribute('href'));
+                if (t) t.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+
+</body>
+</html>
